@@ -6,8 +6,13 @@ status: unverified
 license: mit
 summary: LXS Registry — browse and categorize versioned Linux Services from the getecosphere/lxs-registry repository (single binary serves the browse UI and the JSON API)
 targets:
+- darwin/arm64
 - linux/amd64
 artifacts:
+  darwin/arm64:
+    path: darwin-arm64/registry
+    sha256: f65ccfabc8cb01728717b566a7447ae46abbc44f437413365a5d2a1bd05b7dab
+    size: 3178208
   linux/amd64:
     path: linux-amd64/registry
     sha256: 3e311fddd655971021d4af0b927c1da838134b968f667e5f153e6b2039b9b3c4
