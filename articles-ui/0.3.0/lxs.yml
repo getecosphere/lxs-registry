@@ -1,0 +1,78 @@
+name: articles-ui
+domain: articles
+version: 0.3.0
+publisher: stuff8
+status: unverified
+license: mit
+summary: 'Standalone native SSR UI for the articles domain: /articles + /articles/[slug] with full CommonMark rendering and estate-configurable white-label copy'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/articles-ui
+    sha256: c1f2563ba973246e31879223efb0ef7320e59f942b5ccb4968f8d601b3649495
+    size: 6151104
+  linux/amd64:
+    path: linux-amd64/articles-ui
+    sha256: b6cf6efdc316585f07bd1e14b100c4eda61ffc7fa5d744c4b98c8e9674876e53
+    size: 5143136
+contract:
+  version: 1
+  api: 'articles-ui pages: GET /articles/, GET /articles/[slug]/'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - ARTICLES_API_URL
+    - PUBLIC_SITE_URL
+    - HTML_LANG
+    - BRAND_TEXT
+    - HOME_URL
+    - NAV_LABEL
+    - NAV_HREF
+    - LIST_TITLE
+    - LIST_LEAD
+    - EMPTY_TEXT
+    - DEFAULT_EXCERPT
+    - BACK_TEXT
+    defaults: {}
+    fields: {}
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - https
+  resources:
+    memory: 128m
+    disk: 64m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/articles.git
+  commit: 4c2af36b3b61e7b7bb2701b44a4639663a5d2761
+  built_by: eco@0.4.1
+  built_at: 2026-09-05T11:00:03Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.3.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
