@@ -1,0 +1,147 @@
+name: accounting
+domain: accounting
+version: 0.1.1
+publisher: stuff8
+status: unverified
+license: mit
+summary: 'General ledger: journal entries, trial balance, P&L, balance sheet, periods, audit trail for expense/income tracking and payment recording'
+targets:
+- linux/amd64
+artifacts:
+  linux/amd64:
+    path: linux-amd64/accounting
+    sha256: bb1935ea39fa814b66a8729e4444ff562bfc4903d838a60d63f7528d79640cd2
+    size: 3405592
+contract:
+  version: 2
+  api: accounting REST API
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - DATA_DIR
+    - JWT_SECRET
+    defaults:
+      DATA_DIR: .
+    fields:
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the accounting API listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      DATA_DIR:
+        required: false
+        type: string
+        default: .
+        description: Directory for the SQLite ledger database file
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      JWT_SECRET:
+        required: false
+        type: secret
+        default: ''
+        description: Optional shared secret if an estate requires signed journal postings
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: sqlite-file
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 32m
+    disk: 64m
+    startup_seconds: 2
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: ''
+  commit: ''
+  built_by: eco@0.4.1
+  built_at: 2026-09-05T10:27:24Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.1.1
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: accounting-backend
+    port: 9090
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes:
+      - path: /api/accounts
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /api/journal
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /api/ledger/*
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /api/trial-balance
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /api/pnl
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /api/balance-sheet
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /api/periods
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /api/audit/*
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /api/health
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+  auth:
+    email_verification:
+      enabled: null
