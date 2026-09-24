@@ -1,0 +1,75 @@
+name: telegram
+domain: telegram
+version: 0.8.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: 'Telegram: bot channel for an estate — outbound push, inbound replies, ask/answer conversations'
+targets:
+- linux/amd64
+artifacts:
+  linux/amd64:
+    path: linux-amd64/telegram
+    sha256: 54427e7b4da498d0a85e6e2c93bdda3ea43dc05fe0646b58c0212b28631d3672
+    size: 15474968
+contract:
+  version: 1
+  api: telegram REST API (send + bind + ask/answer conversations)
+  env:
+    required:
+    - SERVER_PORT
+    - MONGODB_URI
+    - TELEGRAM_BOT_TOKEN
+    optional:
+    - SERVER_HOST
+    - TELEGRAM_POLL_INTERVAL_SECS
+    - TELEGRAM_POLL_TIMEOUT_SECS
+    - TELEGRAM_COMMAND_WEBHOOK
+    - TELEGRAM_COMMAND_TOKEN
+    - TELEGRAM_ALLOWED_USER_IDS
+    - TELEGRAM_AUTO_BIND
+    defaults: {}
+    fields: {}
+  db: mongodb@7
+  network:
+    inbound:
+    - http
+    outbound:
+    - https
+  resources:
+    memory: 128m
+    disk: 256m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/telegram.git
+  commit: f4d0ce8a949195216a6230b0e2a2b60f9b75ec4c
+  built_by: eco@0.4.4
+  built_at: 2026-09-24T05:51:55Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.8.0
+docs:
+- README.md
+- api.md
+- changelog.md
+- examples.sh
+- gotchas.md
+- openapi.json
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: YhdEzLhzFH5/Zw5hwI5mNCCFdgogcLU6T1G+SC94riwDskur09lr77YzVz7y9CDGiZNRqV3IUfOa/EB6yTAvBw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
