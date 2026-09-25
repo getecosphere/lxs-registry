@@ -1,0 +1,110 @@
+name: analytics
+domain: analytics
+version: 0.2.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: Privacy-first traffic analytics — cookieless first-party pageview beacon + realtime dashboard; Cloudflare/GA sources plug in as optional feeds
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/analytics
+    sha256: d2ea278a97e9c40a7fd3421b72383ae1a3b2551e1149e6f6193a9629c0467265
+    size: 2029440
+  linux/amd64:
+    path: linux-amd64/analytics
+    sha256: 1f2492e227c3f2db7ecb4202b1b490e05fb1431f405904f417b396efb3b637d8
+    size: 1601104
+contract:
+  version: 2
+  api: 'analytics: GET /analytics-app (dashboard) + GET /analytics-app/api/summary + public beacon POST /analytics-beacon/collect'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - DATA_DIR
+    - SITE
+    defaults:
+      DATA_DIR: ./data
+      SITE: default
+    fields:
+      DATA_DIR:
+        required: false
+        type: string
+        default: ./data
+        description: Directory for the append-only pageview log (persists across deploys)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      SITE:
+        required: false
+        type: string
+        default: default
+        description: Site label recorded on every event (usually the estate name)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the analytics service listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 32m
+    disk: 64m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: github-getecosphere:getecosphere/analytics.git
+  commit: e0856b1575871ddbdf19824270661f50a658cdfe
+  built_by: eco@0.4.4
+  built_at: 2026-09-25T05:34:10Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.2.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: TEKSRbOfAoc6/Dp+efioVa3A2gps30fLw8Wj0dGXp6Nj+0d3mTU+NCldAcchC7ynB9FG4z/9BuQYjnxc0Gb9Dw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
