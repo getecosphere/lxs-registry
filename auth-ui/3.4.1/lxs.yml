@@ -1,0 +1,106 @@
+name: auth-ui
+domain: auth
+version: 3.4.1
+publisher: stuff8
+status: unverified
+license: mit
+summary: White-label signin, signup, and password recovery pages for the auth domain (Leptos SSR)
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  linux/amd64:
+    path: linux-amd64/auth-ui
+    sha256: 3c9762d3a540bfb6ce5dad54a73025ac325cf648e2de4659f6474d75a28892f1
+    size: 2136776
+  darwin/arm64:
+    path: darwin-arm64/auth-ui
+    sha256: dfe1ff67e0ba459717de12385e3e61584c94f5d0d10c9217e60c3c2ebd7b925f
+    size: 3071536
+contract:
+  version: 1
+  api: 'auth-ui pages: GET /signin, GET /signup, GET /forgot-password, GET /reset-password, GET /verify-email, GET /users (role:superadmin)'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - AUTH_API_BASE
+    - AUTH_REDIRECT_URL
+    defaults: {}
+    fields: {}
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - http
+  resources:
+    memory: 32m
+    disk: 32m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/auth-ui.git
+  commit: 1c9c6cd1270b14799cff9887684042e37f38a639
+  built_by: eco@0.4.4
+  built_at: 2026-09-26T10:30:48Z
+  target: x86_64-unknown-linux-musl
+release:
+- 3.4.1
+docs:
+- README.md
+- api.md
+- changelog.md
+- gotchas.md
+compose:
+  service:
+    name: auth-ui
+    port: 4201
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes:
+      - path: /signin
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /signup
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /forgot-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /reset-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /verify-email
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /users
+        level: role:superadmin
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /static/auth-ui.css
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+  auth:
+    email_verification:
+      enabled: null
+attestation: MKSj+sZFhRK1tNFkKLv3LFHZNyZ9yvZB206m7GEeJoFEi4Um80Thk8Mw7kJ/QfPtv6KO+PHdrOKlMgxlgBb5AA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
