@@ -1,0 +1,234 @@
+# auth changelog
+
+## 3.12.2 (2026-09-26)
+- IdP sign-in page: added the same **show/hide password ("eye") toggle** as
+  auth-ui, and pinned the auth-ui stylesheet to `?v=7`.
+
+## 3.12.1 (2026-09-26)
+- **IdP sign-in page now matches `auth-ui`.** The provider's `/oidc/authorize`
+  sign-in page uses the same markup, copy, fonts and `/static/auth-ui.css`
+  stylesheet as `auth-ui`, and includes the same links (`Forgot password?`,
+  `Create an account` → `/signup`, `← Back to homepage`), so a first-time
+  visitor can register straight from the SSO screen.
+
+## 3.12.0 (2026-09-26)
+- **OIDC provider (IdP) mode** — opt-in via `OIDC_PROVIDER_ENABLED=true`. This
+  estate can issue identities to sibling estates using **public clients**
+  (`OIDC_PROVIDER_CLIENTS` = `client_id|redirect_uri` entries joined by `;`).
+  Endpoints (under `/api/auth/idp`): `GET|POST /oidc/authorize`,
+  `POST /oidc/token`, `GET /oidc/userinfo`, `GET /.well-known/openid-configuration`.
+  The `eco_token` browser cookie on this origin doubles as the IdP session, so a
+  user already signed in here is not prompted again (no re-auth across apps).
+- **Client mode `OIDC_IDENTITY_VIA_USERINFO=true`** — resolve the identity from
+  the provider's `/oidc/userinfo` (over TLS) instead of verifying the id_token
+  with a shared secret. Enables first-party public clients with no shared key.
+
+## 3.11.0 (2026-09-21)
+- **Admin user management (superadmin-only).** New endpoints:
+  `GET /api/auth/admin/users` (paginated, searchable, `status=active|deleted|all`),
+  `POST .../:id/deactivate` (soft-delete + revoke sessions; refuses self and the
+  last superadmin), `POST .../:id/reactivate`, `POST .../:id/logout` (force
+  sign-out), `POST .../:id/reset-password` (emails a reset link),
+  `POST .../:id/verify-email`, plus the existing roles endpoints. All mutations
+  are audit-logged and none return credentials or hashes. There is deliberately
+  no admin set-password endpoint.
+- **Security:** `superadmin` must be granted out-of-band — do **not** add it to
+  the estate's `auth.roles` registration allowlist, or a self-service signup
+  could request it (privilege escalation). Legacy `DELETE /users/:id` now also
+  revokes sessions.
+
+## 3.10.0 (2026-09-21)
+- **Signup no longer locks the account out of sign-in.** A session minted by
+  the `register` auto-login is now *provisional* (`origin: "register"`): a real
+  sign-in with the correct password supersedes it instead of being rejected
+  with `409 ALREADY_EXISTS`. Previously an estate that disabled email
+  verification (`EMAIL_VERIFICATION_REQUIRED=false`) issued a session at signup,
+  and any later sign-in — same browser after the cookie expired, or a new
+  device — was blocked by single-session enforcement for the life of the 30-day
+  session. The strict single-active-session rule is unchanged between real
+  sign-ins (`origin: "login"`): a second sign-in while a Login session is
+  active still returns 409. Legacy session rows with no `origin` field read as
+  `Login` and keep blocking, so behaviour for existing sessions is unchanged.
+- The superseded provisional session is revoked server-side when the real
+  sign-in takes over (its token immediately fails `session-status`).
+
+## 3.9.0 (2026-09-11)
+- **OpenID Connect SSO (platform as IdP).** `GET /auth/oidc/login` redirects to
+  the platform IdP; `GET /auth/oidc/callback` exchanges the code, verifies the
+  id_token (HS256 shared secret), creates/links a local user (estate-owned
+  roles/profile preserved) and mints the normal estate session (writes
+  `localStorage.eco_session` + the `eco_token` cookie). Opt-in via
+  `OIDC_ENABLED`; password login is unchanged.
+
+## 3.8.1 (2026-08-31)
+- Docs-only patch (binary identical to 3.8.0): `openapi.json` now reflects the
+  current route surface (added `login-link`/`login-link/confirm`,
+  `forgot-password`, `reset-password`, `logout`, `session-status`, admin
+  routes; removed long-dead avatar/file endpoints), `examples.sh` smoke tests
+  cover the login-link flow, and `gotchas.md` documents login-link constraints.
+
+## 3.8.0 (2026-08-31)
+- **Passwordless login links — the recovery path for single-session
+  lockout.** A user blocked by `409 ALREADY_EXISTS` (an active session on a
+  lost/broken device) can now request a one-time email link and sign in on a
+  new device without changing their password.
+- New public `POST /api/auth/login-link` (generic 202, never reveals account
+  existence) and `POST /api/auth/login-link/confirm` (single-use token mints a
+  fresh session and revokes every older one). Proving mailbox control also
+  marks an unverified account's email verified.
+- Link tokens reuse the reset-token pattern: bcrypt-hashed secret stored
+  server-side, one unused link per account, TTL via new optional
+  `LOGIN_LINK_TTL_MINUTES` (default 10, bounded 5–60). Delivery reuses the
+  estate Brevo provider or the scoped `eco serve` relay.
+- Both routes sit under the auth credential rate limiter alongside login and
+  forgot-password.
+
+## 3.7.0 (2026-08-27)
+- Added superadmin-only role assignment at
+  `PUT /api/auth/admin/users/:id/roles`. Auth updates the canonical claims and
+  revokes existing sessions so the approved account must sign in again with
+  its new role.
+
+## 3.6.1 (2026-08-27)
+- Added `POST /api/auth/admin/register`, an active-session, superadmin-only
+  provisioning route. It is outside the public credential rate limiter, so an
+  authorized estate can create a classroom of accounts without weakening
+  login or public signup throttling.
+- Accounts created through that administrative route never receive a login
+  session during provisioning; their first student login is therefore their
+  first active device.
+
+## 3.5.1 (2026-08-26)
+- Canonicalized new email addresses to lowercase and made legacy email lookup
+  case-insensitive. Sign-in and password recovery now work regardless of the
+  casing a person uses in their email address.
+
+## 3.5.0 (2026-08-25)
+- Added backward-compatible multi-role identities. Auth keeps the legacy
+  primary `role` and now emits the complete `roles` array in user responses
+  and HS512 JWTs. Existing users with no `roles` field continue to receive
+  their primary role as the full effective set.
+
+## 3.4.1 (2026-08-23)
+- Auth's composition recipe now materializes
+  `services.auth-backend.config.EMAIL_VERIFICATION_REQUIRED: "true"` too, so
+  the service and top-level identity policy visibly agree in ecompose.yml.
+
+## 3.4.0 (2026-08-23)
+- Email verification is now secure-by-default
+  (`EMAIL_VERIFICATION_REQUIRED=true`).
+- Added Auth's `compose:` recipe: `eco lxs add` can now materialize its port,
+  grants, Gateway routes and visible `auth.email_verification.enabled: true`
+  estate policy.
+- The scoped Eco Serve relay now accepts Auth verification links as well as
+  password-recovery links. Estate-owned Brevo remains the first choice.
+
+## 3.3.1 (2026-08-23)
+- Added the `darwin/arm64` artifact required by `eco up dev` / `eco serve` on
+  Apple Silicon. This matches Auth's documented multi-OS local-development
+  contract.
+
+## 3.3.0 (2026-08-23)
+- Password recovery can now use Eco's platform relay during an active
+  `eco serve` session when an estate has not supplied its own Brevo sender.
+  The relay capability is temporary and hostname-scoped; it accepts only
+  Auth's reset link and is rate-limited. Estate-owned `BREVO_API_KEY` and
+  `MAIL_FROM_EMAIL` remain the first-choice override.
+- Added optional `EMAIL_RELAY_URL` and secret `EMAIL_RELAY_TOKEN` contract
+  fields. They are Eco-managed runtime values, never manifest values.
+
+## 3.2.0 (2026-08-22)
+- Added secure password recovery: `POST /api/auth/forgot-password` always
+  returns a generic 202, and `POST /api/auth/reset-password` accepts a
+  bcrypt-hashed, single-use, expiring email token.
+- Reset success revokes all previous sessions. Added optional
+  `PASSWORD_RESET_TTL_MINUTES` (default 60, bounded to 5–1,440).
+- Corrected domain ownership documentation: avatar/cover and all profile
+  content belong to `profile` + `storage`, not Auth.
+
+## 3.1.0 (2026-08-21)
+- **Login rejects a second sign-in while a session is active.** Previously a
+  new login silently revoked every older session ("last one wins"), which
+  kicked the already-signed-in device out with no accurate explanation.
+  Now `POST /api/auth/login` returns **409 `ALREADY_EXISTS`** with an accurate
+  message (`"Already signed in on another device. Sign out from that device
+  first."`) and the existing session is left untouched. Log out (or wait for
+  the session to expire) before signing in again.
+- `GET /api/auth/session-status` and the estate gateway are unchanged: a
+  token whose session was revoked (logout) or expired still 401s at the edge.
+- This is the intended single-session UX — the current device is the source
+  of truth and stays signed in; duplicates are blocked, not displaced.
+
+## 3.0.1 (2026-08-20)
+- Artifacts: added `darwin/arm64` so estates composing `auth@3.0.0+` can run
+  `eco up dev` locally (previously linux/amd64 only).
+
+## 3.0.0 (2026-08-19)
+- **Single active session per account.** Login/register mint a new session
+  (`sessions` collection, one per user) that revokes every older one; the JWT
+  now carries a `sid` (session id) claim. Auth's middleware and the estate
+  gateway reject any token whose session is no longer active — the same
+  account can no longer stay signed in on two devices.
+- **Breaking:** bearer tokens without a `sid` are rejected (401) when
+  `SESSION_REQUIRED` is true (default) — every client must re-login once after
+  upgrade. Set `SESSION_REQUIRED=false` for a graceful legacy-token window
+  (legacy tokens cannot be revoked server-side).
+- **New:** `POST /api/auth/logout` revokes the caller's session;
+  `GET /api/auth/session-status` reports `{ active, sessionId, expiresInSeconds,
+  user }` for the presented token (the gateway polls it per protected request
+  to enforce single-session at the edge).
+- `AuthResponse` gains `sessionId`.
+- Contract: added optional `SESSION_REQUIRED` (bool, default true); v2 `fields`
+  schema updated.
+
+## 2.1.0 (2026-08-19)
+- Contract v2: `contract.env` now ships a machine-readable `fields` schema (per-key `type`, `default`, `description`, `group`, `secret`, `managed`). Same binary, same env vars, same required keys — the format gained metadata only. `required`/`optional`/`defaults` are kept as derived views so consumers predating the v2 schema (eco < 0.4.2) still resolve the contract.
+- `managed:` ownership now declared in the contract: `JWT_SECRET` (shared-jwt), `MONGODB_URI` (mongo-db), `SERVER_PORT` (port), `CORS_ALLOWED_ORIGINS` (cors-origins), `ECO_AUTH_ROLES`/`ECO_AUTH_DEFAULT_ROLE` (identity-roles), `SIGNUP_EVENT_URL` (signup-event).
+- Config schema spec: see `eco-server/docs/lxs-config-schema-v2.md`.
+
+## 2.0.0 (2026-08-19)
+- Logging contract: service logs now emitted as newline-delimited JSON (NDJSON) to stdout per the platform LXS logging contract (`ts`/`level`/`msg` + optional `service`,`request_id`,`status`,`latency_ms`,`user_id`,`error`). Breaking change — log output format changed.
+
+## 1.3.0 — signup domain event (2026-08-17)
+
+- **New:** optional `SIGNUP_EVENT_URL` (+ optional `SIGNUP_EVENT_TOKEN`). After
+  each successful `register`/`register-with-profile`, auth fire-and-forget
+  POSTs a `user.signed_up` event (JSON, bearer token, 5s timeout):
+
+  ```json
+  { "event": "user.signed_up", "userId": "<id>", "username": "...",
+    "email": "...", "name": "...", "role": "...", "at": "<rfc3339>" }
+  ```
+
+- Auth never interprets the sink URL or token — it is a pure outbox-style
+  domain event. The composer decides the consumer (e.g. the notifications LXS
+  ingest endpoint). A failing or slow sink never fails registration.
+- Contract: added optional `SIGNUP_EVENT_URL`, `SIGNUP_EVENT_TOKEN`; network
+  outbound widened to `http, https`.
+
+## 1.2.0 — multi-OS artifacts (2026-08-17)
+
+- Artifacts for all five targets: linux/amd64, linux/arm64, darwin/amd64,
+  darwin/arm64, windows/amd64 (same feature set as 1.1.0).
+
+## 1.1.0 — pure identity (2026-08-16)
+
+- **Removed** avatar/cover-photo upload, file serving, and storage (S3/MinIO)
+  entirely. Auth is now pure identity: login, register, JWT, email
+  verification, transactional mail, `username`/`email`/`name`/`role`.
+- Avatar/cover now belong to the `profile` domain (profile proxies uploads to
+  the `storage` LXS). `POST /users/:id/avatar`,
+  `POST /users/:id/upload-cover-photo`, `/files/:id`, `/files/view/:id` are
+  gone from auth; profile exposes `POST /users/:id/avatar` and
+  `POST /users/:id/upload-cover-photo` instead.
+- `avatarUrl`/`coverPhotoUrl` removed from auth's `UserDto` (profile returns
+  them now).
+- Dropped `image`, `webp`, `aws-sdk-s3` dependencies — linux binary shrank
+  **25 MB → 10.7 MB (-57%)**, darwin 22 MB → 9.4 MB (-58%).
+- Contract: removed `STORAGE_BACKEND` env; lowered resource envelope to
+  memory 64m / disk 128m.
+
+## 1.0.x — previous
+
+Avatar upload, cover photo, file serving, S3 storage, image processing
+(see 1.0.2 docs).
