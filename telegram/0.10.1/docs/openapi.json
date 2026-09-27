@@ -1,0 +1,35 @@
+{
+  "openapi": "3.0.0",
+  "info": { "title": "telegram LXS", "version": "0.1.0" },
+  "paths": {
+    "/health": { "get": { "summary": "health", "responses": { "200": { "description": "ok" } } } },
+    "/api/telegram/health": { "get": { "summary": "health alias", "responses": { "200": { "description": "ok" } } } },
+    "/api/telegram/send": {
+      "post": {
+        "summary": "send a message to a bound key",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["key", "text"], "properties": { "key": { "type": "string" }, "text": { "type": "string" }, "parse_mode": { "type": "string", "enum": ["HTML", "Markdown", "MarkdownV2"] } } } } } },
+        "responses": { "200": { "description": "sent" }, "404": { "description": "no_channel" }, "503": { "description": "provider not configured" } }
+      }
+    },
+    "/api/telegram/bind": {
+      "post": {
+        "summary": "bind a key to a chat",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["key"], "properties": { "key": { "type": "string" }, "kind": { "type": "string", "enum": ["private", "group"] }, "telegram_user_id": { "type": "integer", "format": "int64" }, "chat_id": { "type": "integer", "format": "int64" }, "label": { "type": "string" } } } } } },
+        "responses": { "200": { "description": "bound" } }
+      }
+    },
+    "/api/telegram/bindings": { "get": { "summary": "list bindings", "responses": { "200": { "description": "bindings" } } } },
+    "/api/telegram/bindings/{key}": { "delete": { "summary": "remove a binding", "parameters": [{ "name": "key", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "deleted" } } } },
+    "/api/telegram/chats": { "get": { "summary": "chats the bot has seen", "responses": { "200": { "description": "chats" } } } },
+    "/api/telegram/ask": {
+      "post": {
+        "summary": "send a question and open a conversation",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["key", "text"], "properties": { "key": { "type": "string" }, "text": { "type": "string" }, "parse_mode": { "type": "string" }, "timeout_secs": { "type": "integer", "minimum": 15, "maximum": 3600 } } } } } },
+        "responses": { "201": { "description": "conversation opened" }, "404": { "description": "no_channel" } }
+      }
+    },
+    "/api/telegram/conversations": { "get": { "summary": "list conversations", "responses": { "200": { "description": "conversations" } } } },
+    "/api/telegram/conversations/{id}": { "get": { "summary": "get a conversation", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "conversation" }, "404": { "description": "not found" } } } },
+    "/api/telegram/conversations/{id}/cancel": { "post": { "summary": "cancel an open conversation", "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "canceled" } } } }
+  }
+}
