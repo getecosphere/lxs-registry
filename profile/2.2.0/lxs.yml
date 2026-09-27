@@ -1,0 +1,80 @@
+name: profile
+domain: profile
+version: 2.2.0
+publisher: stuff8
+status: unverified
+license: mit
+summary: 'User profiles: bio, experience, education, skills, certifications, links, avatars'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/profile
+    sha256: 23e19530a33056f6ff13703166a677de3cf9c4957f433fc367ac94449b683f63
+    size: 17790896
+  linux/amd64:
+    path: linux-amd64/profile
+    sha256: 0f8e4ce131a1ab7cf7fda3404ca1f3fe90b5ad0436ce9fd3218025d86e8ddda7
+    size: 16067960
+contract:
+  version: 1
+  api: profile REST API (read/write profile + social links + avatar upload)
+  env:
+    required:
+    - MONGODB_URI
+    - JWT_SECRET
+    - SERVER_PORT
+    - API_BASE_URL
+    optional:
+    - CORS_ALLOWED_ORIGINS
+    - AUTH_BASE_URL
+    - STORAGE_BASE_URL
+    - STORAGE_PUBLIC_URL
+    - RATE_LIMIT_GENERAL_BURST
+    - RATE_LIMIT_GENERAL_REPLENISH_SECS
+    defaults: {}
+    fields: {}
+  db: mongodb@7
+  network:
+    inbound:
+    - http
+    outbound:
+    - http
+  resources:
+    memory: 128m
+    disk: 256m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/profile.git
+  commit: 2e282b54f8a840f55d4ca279407717c480852f5d
+  built_by: eco@0.4.4
+  built_at: 2026-09-27T12:09:00Z
+  target: x86_64-unknown-linux-musl
+release:
+- 2.2.0
+docs:
+- README.md
+- api.md
+- changelog.md
+- examples.sh
+- gotchas.md
+- openapi.json
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: 1L/ywnBKlPzjX0aQDhw/3DzgTsfRbz/s3TwtjSeuptk1e5O9I1izC7u/5APCGcoGkb8Aha/G3qT/ErLlRYhBDw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
