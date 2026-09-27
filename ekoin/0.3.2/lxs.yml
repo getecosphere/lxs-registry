@@ -1,0 +1,292 @@
+name: ekoin
+domain: ekoin
+version: 0.3.2
+publisher: getecosphere
+status: unverified
+license: mit
+summary: 'ekoin — intrinsic currency wallet: double-entry coin ledger, campaign claim, top-up invoices (simulated/Midtrans), purchases, revenue & accounting reports'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  linux/amd64:
+    path: linux-amd64/ekoin
+    sha256: 064f877e36e954a135af532df32343f5161e6e0e1ff3324c08daa08353a9b1fc
+    size: 8203440
+  darwin/arm64:
+    path: darwin-arm64/ekoin
+    sha256: 11fc20948fb48b5ef13c0a73c7ee50e60616820a06b51dd201482635fa3a7cef
+    size: 9934832
+contract:
+  version: 2
+  api: ekoin REST API (/api/*)
+  env:
+    required:
+    - SERVER_PORT
+    - DATABASE_URL
+    - JWT_SECRET
+    optional: []
+    defaults: {}
+    fields:
+      DCS_PRODUCT_REF:
+        required: false
+        type: string
+        default: ecobook
+        description: DCS product reference sold by this estate
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_CAMPAIGN_BUDGET:
+        required: false
+        type: int
+        default: '5000'
+        description: Total ekoin budget for the campaign
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the ekoin API listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      EKOIN_CAMPAIGN_NAME:
+        required: false
+        type: string
+        default: welcome
+        description: Campaign used by the claim endpoint
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      ACCOUNTING_BASE_URL:
+        required: false
+        type: string
+        default: ''
+        description: accounting LXS base URL (e.g. http://127.0.0.1:4621) to post company journal entries
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_CAMPAIGN_PER_USER:
+        required: false
+        type: int
+        default: '50'
+        description: ekoin granted per claim
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_SALES_URL:
+        required: false
+        type: string
+        default: ''
+        description: Goldback DCS base URL; when set, a paid top-up records a DCS sale
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      ACCOUNTING_TOKEN:
+        required: false
+        type: secret
+        default: ''
+        description: Optional bearer for the accounting API
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_CURRENCY:
+        required: false
+        type: string
+        default: rwid:ekoin
+        description: Currency code shown to clients
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_SERVICE_TOKEN:
+        required: false
+        type: string
+        default: ''
+        description: Token that lets a merchant domain call /api/internal/*
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      CORS_ALLOWED_ORIGINS:
+        required: false
+        type: string
+        default: http://localhost:3000
+        description: Comma-separated allowed origins
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_INTERNAL_TOKEN:
+        required: false
+        type: string
+        default: ''
+        description: Token for the DCS /api/sales endpoint
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      JWT_SECRET:
+        required: true
+        type: secret
+        default: ''
+        description: Shared estate JWT secret used to verify user tokens
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_TENANT:
+        required: false
+        type: string
+        default: rwid
+        description: Economy namespace (one instance = one economy)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_RATE_RUPIAH:
+        required: false
+        type: int
+        default: '1000'
+        description: Rupiah per 1 ekoin
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_CAMPAIGN_MAX_USERS:
+        required: false
+        type: int
+        default: '100'
+        description: Maximum number of claims
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DATABASE_URL:
+        required: true
+        type: secret
+        default: ''
+        description: PostgreSQL connection string (ledger store)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: postgresql@15
+  network:
+    inbound:
+    - http
+    outbound:
+    - https
+    - http
+  resources:
+    memory: 160m
+    disk: 256m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: git@github.com:getecosphere/ekoin.git
+  commit: 83912a32e4cb73a6464820a9272fa8e7d786f977
+  built_by: eco@0.4.4
+  built_at: 2026-09-27T08:36:12Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.3.2
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: QAbhO70HlqbAraJiIXSQ8KMTUXSovb5c19oqld3DIswzhNsAs+xU/j6ODirqJVHHTfHZxHWVlp2h6+04IKH1AA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
