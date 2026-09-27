@@ -1,0 +1,114 @@
+name: presence
+domain: presence
+version: 0.3.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: 'Realtime presence hub — fan-out join/login pulses over SSE to light up the RWID globe (privacy-first: first name only)'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/presence
+    sha256: 2385927368931d54296b86a8cd31adb74ed173bcff59a0b054b8e2f245c75d14
+    size: 4577952
+  linux/amd64:
+    path: linux-amd64/presence
+    sha256: 6da4ca03cbfc189106d4b2d4fccdb72e8cec80dbe2ef9c10594b74c14fdc2b50
+    size: 3827720
+contract:
+  version: 2
+  api: 'presence: GET /api/health, GET /api/stats, POST /api/event, GET /api/stream (SSE)'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - CORS_ALLOWED_ORIGINS
+    defaults: {}
+    fields:
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the presence service listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      CORS_ALLOWED_ORIGINS:
+        required: false
+        type: csv-url
+        default: ''
+        description: Origins allowed to call this API
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: cors-origins
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 32m
+    disk: 32m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: github-getecosphere:getecosphere/presence.git
+  commit: a5e7cb93688b3a22f735108b427c854b0d49a96e
+  built_by: eco@0.4.4
+  built_at: 2026-09-27T11:38:56Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.3.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: presence-backend
+    port: 4200
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes:
+      - path: /api/presence/event
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+      - path: /api/presence/stats
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+      - path: /api/presence/stream
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+      - path: /api/presence/health
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+  auth:
+    email_verification:
+      enabled: null
+attestation: //wvbUPAIM58tznCCk+4WaWHNyuYCnmHur2xkeBbpc55kdrGl1Pbc3BEDj1hxvj4HypRc/L3yggUoM84p1psCw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
