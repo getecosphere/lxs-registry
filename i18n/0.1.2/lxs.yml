@@ -1,0 +1,110 @@
+name: i18n
+domain: i18n
+version: 0.1.2
+publisher: getecosphere
+status: unverified
+license: mit
+summary: 'Translation catalogs as a service: versioned message catalogs served over HTTP with stable ETags, so estates localize content without rebuilding'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  linux/amd64:
+    path: linux-amd64/i18n
+    sha256: 92cb3d87c9146b2336596fd0931aefe2c2f4442fc5076c7cab5ba17ff81cb037
+    size: 1418824
+  darwin/arm64:
+    path: darwin-arm64/i18n
+    sha256: a686d1f1b699941f99fafc5bce5f3576fb5c4885fd280078b4ac701ab9d48293
+    size: 1780944
+contract:
+  version: 2
+  api: 'i18n: GET /api/i18n/locales + GET /api/i18n/catalog/:locale/:namespace + GET /api/i18n/health'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - DEFAULT_LOCALE
+    - LOCALES
+    defaults:
+      DEFAULT_LOCALE: en
+      LOCALES: en,id
+    fields:
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the i18n service listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      LOCALES:
+        required: false
+        type: csv
+        default: en,id
+        description: Locales this instance exposes (comma-separated ISO-639 codes)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DEFAULT_LOCALE:
+        required: false
+        type: string
+        default: en
+        description: Fallback locale served when a request does not name one
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 16m
+    disk: 32m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: git@github.com:getecosphere/i18n.git
+  commit: 50d79685dea0bf617917fca39cabd1284814ff3a
+  built_by: eco@0.4.4
+  built_at: 2026-09-29T04:11:51Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.1.2
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: XbCJfg60DQd43AczthAvN6BqM4gDMl4IQpLi/BHig1EvB5T/3/auGQULMCJplxNQDxxyFZBCiEP/MVys2Q/CDg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
