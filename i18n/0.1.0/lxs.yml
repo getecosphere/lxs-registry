@@ -1,0 +1,110 @@
+name: i18n
+domain: i18n
+version: 0.1.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: 'Translation catalogs as a service: versioned message catalogs served over HTTP with stable ETags, so estates localize content without rebuilding'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/i18n
+    sha256: 1f55eea5fd98fae260a4a3145e646e1d7aaef4ab6538cf35116c1395e38d658b
+    size: 1731408
+  linux/amd64:
+    path: linux-amd64/i18n
+    sha256: 97e9eb2a40d4cf49c14aa0ef524833edf20f7b4283e526c7a911c4f10eaf107e
+    size: 1366008
+contract:
+  version: 2
+  api: 'i18n: GET /api/i18n/locales + GET /api/i18n/catalog/:locale/:namespace + GET /api/i18n/health'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - DEFAULT_LOCALE
+    - LOCALES
+    defaults:
+      DEFAULT_LOCALE: en
+      LOCALES: en,id
+    fields:
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the i18n service listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      DEFAULT_LOCALE:
+        required: false
+        type: string
+        default: en
+        description: Fallback locale served when a request does not name one
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      LOCALES:
+        required: false
+        type: csv
+        default: en,id
+        description: Locales this instance exposes (comma-separated ISO-639 codes)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 16m
+    disk: 32m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: ''
+  commit: ''
+  built_by: eco@0.4.4
+  built_at: 2026-09-29T00:27:33Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.1.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: CyZ092Ir9yUXiqjxM09XYmldTuob0D6HZahqnSf6qm7VwiIo1tDlcdiGVmqHCDZ92fi9roMQpRcLA/WST4GLAw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
