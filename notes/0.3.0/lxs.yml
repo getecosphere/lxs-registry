@@ -1,0 +1,94 @@
+name: notes
+domain: notes
+version: 0.3.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: notes — macOS-Notes-style per-user notes (MongoDB) with a self-contained UI
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/notes
+    sha256: 2391e3b426a690a315a91744e21c90bef0674ef4231bac5cdb65438f8d76d7cc
+    size: 11351568
+  linux/amd64:
+    path: linux-amd64/notes
+    sha256: 81c7dcf78f35d7bc1ee9117f8a88fc16c4211018a41b4ddf634c41e8311c916b
+    size: 9741608
+contract:
+  version: 1
+  api: 'notes: GET/POST /api/notes, PUT/DELETE /api/notes/{id}, GET /notes-app (UI)'
+  env:
+    required:
+    - MONGODB_URI
+    - JWT_SECRET
+    - SERVER_PORT
+    optional: []
+    defaults: {}
+    fields: {}
+  db: mongodb
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 64m
+    disk: 64m
+    startup_seconds: 5
+  health:
+    path: /api/health
+    readiness: /api/health
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: git@github.com:getecosphere/notes.git
+  commit: 42a44a5e0cf64808e1e6cdc29dd080f1246fbb67
+  built_by: eco@0.4.4
+  built_at: 2026-09-29T23:17:48Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.3.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: notes-backend
+    port: 4301
+    grants:
+      secrets:
+      - JWT_SECRET
+      - MONGODB_URI
+    config: {}
+    access:
+      routes:
+      - path: /notes-app
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /notes-app/*
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /api/notes
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /api/notes/*
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+  auth:
+    email_verification:
+      enabled: null
+attestation: e7GBpuyX4fEwyFYXthIEztuadnVeogx6nqVZCl2i/3su1EQafjwgvAabom8ufJ3OVj/eAwjleUS2EaX3BBrcCw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
