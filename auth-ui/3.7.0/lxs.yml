@@ -1,0 +1,156 @@
+name: auth-ui
+domain: auth
+version: 3.7.0
+publisher: stuff8
+status: unverified
+license: mit
+summary: White-label signin, signup, and password recovery pages for the auth domain (Leptos SSR)
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  linux/amd64:
+    path: linux-amd64/auth-ui
+    sha256: 3a8617aeb8bee018ac3e2cc80f7e7e79adc4ee84d666dabcf787f33698ca9a61
+    size: 2209360
+  darwin/arm64:
+    path: darwin-arm64/auth-ui
+    sha256: 337909e04b31e6955e59b83bb89c2c2e81f9a70690997b63f989b4f3a8411b7f
+    size: 3149904
+contract:
+  version: 1
+  api: 'auth-ui pages: GET /signin, GET /signup, GET /forgot-password, GET /reset-password, GET /verify-email, GET /users (role:superadmin)'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - AUTH_API_BASE
+    - AUTH_REDIRECT_URL
+    defaults: {}
+    fields: {}
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - http
+  resources:
+    memory: 32m
+    disk: 32m
+    startup_seconds: 5
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/auth-ui.git
+  commit: d6f5db41d899d4499cb4e37721c4c981fd957d1a
+  built_by: eco@0.4.4
+  built_at: 2026-09-29T05:10:22Z
+  target: x86_64-unknown-linux-musl
+release:
+- 3.7.0
+docs:
+- README.md
+- api.md
+- changelog.md
+- gotchas.md
+compose:
+  service:
+    name: auth-ui
+    port: 4201
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes:
+      - path: /signin
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /signup
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /forgot-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /reset-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /verify-email
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /users
+        level: role:superadmin
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /static/auth-ui.css
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/signin
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/signup
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/forgot-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/reset-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/verify-email
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/signin
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/signup
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/forgot-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/reset-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/verify-email
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+  auth:
+    email_verification:
+      enabled: null
+attestation: f5xKKdFJQCQZ5ZDzD3xtsrN4TpBXJKk1Da/U4MYWTg7yRe6O2T7Vvbr3Uw0+LChmWBqmZK15/6JACJ1KsdeeDA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
