@@ -1,0 +1,178 @@
+name: presence
+domain: presence
+version: 0.5.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: 'Realtime presence hub — fan-out join/login pulses over SSE to light up the RWID globe (privacy-first: first name only)'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/presence
+    sha256: 87868410574cabaca7d61b400e545d1e06d4fac22a22dd71f0aa89650ed06dd0
+    size: 5673264
+  linux/amd64:
+    path: linux-amd64/presence
+    sha256: 44f6dfcf567876aa0e6c524b7de0b13d6115557b83b82ff8845d30ffe4ee6aa5
+    size: 4610400
+contract:
+  version: 2
+  api: 'presence: GET /api/health, GET /api/stats, POST /api/event, GET /api/stream (SSE)'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - CORS_ALLOWED_ORIGINS
+    - PRESENCE_GEO_DB
+    - PRESENCE_GEO_URL
+    - PRESENCE_DATA_DIR
+    - REDIS_URL
+    defaults: {}
+    fields:
+      PRESENCE_DATA_DIR:
+        required: false
+        type: string
+        default: ''
+        description: Directory for daily pulse logs (/<UTC-date>.ndjson) backing GET /api/replay.
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      REDIS_URL:
+        required: false
+        type: string
+        default: ''
+        description: Redis URL. When set, pulses fan out across replicas (pub/sub) and counters are atomic in Redis — enables N presence replicas behind the gateway. Empty = single-process.
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the presence service listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      CORS_ALLOWED_ORIGINS:
+        required: false
+        type: csv-url
+        default: ''
+        description: Origins allowed to call this API
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: cors-origins
+        example: ''
+      PRESENCE_GEO_DB:
+        required: false
+        type: string
+        default: ''
+        description: Absolute path to an ip->city MaxMind-DB (.mmdb) for offline geo (GeoLite2-City or DB-IP Lite). Empty = use PRESENCE_GEO_URL.
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      PRESENCE_GEO_URL:
+        required: false
+        type: string
+        default: ''
+        description: HTTP geo lookup base when no offline DB is set (default http://ip-api.com/json).
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 32m
+    disk: 32m
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: github-getecosphere:getecosphere/presence.git
+  commit: b72597e0f27b576f38a15f5892a5fcc9935a6346
+  built_by: eco@0.4.4
+  built_at: 2026-09-29T21:21:02Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.5.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: presence-backend
+    port: 4200
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes:
+      - path: /api/presence/event
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+      - path: /api/presence/stats
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+      - path: /api/presence/replay
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+      - path: /api/presence/stream
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+      - path: /api/presence/health
+        level: public
+        strip: /api/presence
+        rewrite: /api
+        cookie: ''
+  auth:
+    email_verification:
+      enabled: null
+attestation: wB/0IQ+oUv7LPKE+owW5L8EIG94jyvVCLezrNdS+1QVWMnD+WquFzkME7HVCErGLtd6zyyyrV2jqdonka2wDBA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
