@@ -1,0 +1,94 @@
+name: notes
+domain: notes
+version: 0.5.3
+publisher: getecosphere
+status: unverified
+license: mit
+summary: notes — macOS-Notes-style per-user notes (MongoDB) with a self-contained UI
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/notes
+    sha256: faa5d4a1a0c8d17167d6646590ec900f2031181d74d122ddbd10039a784934a3
+    size: 12010704
+  linux/amd64:
+    path: linux-amd64/notes
+    sha256: c68d9938cfa1688f038576b081d19abe2e59705bbc773ba8c9dfac192269fc02
+    size: 10303048
+contract:
+  version: 1
+  api: 'notes: GET/POST /api/notes, PUT/DELETE /api/notes/{id}, GET /api/notes/quota, POST/DELETE /api/notes/{id}/images, GET /notes-app (UI)'
+  env:
+    required:
+    - MONGODB_URI
+    - JWT_SECRET
+    - SERVER_PORT
+    optional: []
+    defaults: {}
+    fields: {}
+  db: mongodb
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 64m
+    disk: 64m
+    startup_seconds: 5
+  health:
+    path: /api/health
+    readiness: /api/health
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: git@github.com:getecosphere/notes.git
+  commit: 486a15d58c87a39a46ac2fe257db74e6effd9942
+  built_by: eco@0.4.4
+  built_at: 2026-09-29T23:49:40Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.5.3
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: notes-backend
+    port: 4301
+    grants:
+      secrets:
+      - JWT_SECRET
+      - MONGODB_URI
+    config: {}
+    access:
+      routes:
+      - path: /notes-app
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /notes-app/*
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /api/notes
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /api/notes/*
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+  auth:
+    email_verification:
+      enabled: null
+attestation: 15JZctolAwLq6C8Hm2Vvc1u0TJRtbh0IF5RhF/0XV1ZlC4HRLZyQLK13DEqYPJwKrfa6H3wBqO04hMAAX27+BQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
