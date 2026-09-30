@@ -1,0 +1,143 @@
+name: gateway
+domain: gateway
+version: 3.9.0
+publisher: stuff8
+status: unverified
+license: mit
+summary: 'Estate front door: default-deny HTTP reverse-proxy + authorization middleware (JWT, roles, single-session, strip/rewrite), upstream pool (round-robin + passive health + connect-failure failover/retry), SIGHUP hot-reload, /healthz+/readyz, HTTP→HTTPS redirect, optional pre-release gate (redirect all non-exempt paths to a launch page), baseline security headers, with content-negotiated HTML/JSON error pages'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/gateway
+    sha256: 7f579af56317f111723ead9aaec5ed2c6ed577ab39ad87587fabb65428ff5bc7
+    size: 5799584
+  linux/amd64:
+    path: linux-amd64/gateway
+    sha256: 5d4316db64c19442c94f17343d45139701a66eeaf2538ed1961929ad2ac8c692
+    size: 4647720
+contract:
+  version: 2
+  api: 'gateway: HTTP reverse-proxy + ACL; routes from GATEWAY_CONFIG'
+  env:
+    required:
+    - SERVER_PORT
+    - JWT_SECRET
+    - GATEWAY_CONFIG
+    optional:
+    - AUTH_SESSION_CHECK_URL
+    - SESSION_REQUIRED
+    defaults:
+      SESSION_REQUIRED: 'true'
+    fields:
+      JWT_SECRET:
+        required: true
+        type: secret
+        default: ''
+        description: HS512 signing key shared with the estate's auth service
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: shared-jwt
+        example: ''
+      GATEWAY_CONFIG:
+        required: true
+        type: json
+        default: ''
+        description: Path to the gateway.json route/ACL config written by configgen
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the gateway listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      AUTH_SESSION_CHECK_URL:
+        required: false
+        type: url
+        default: ''
+        description: Auth session-status endpoint; the gateway re-validates each protected token's session here (single-session enforcement)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: auth-session-check
+        example: ''
+      SESSION_REQUIRED:
+        required: false
+        type: bool
+        default: 'true'
+        description: Reject bearer tokens without a session id (legacy pre-session tokens). Mirrors auth's SESSION_REQUIRED.
+        group: session
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - http
+  resources:
+    memory: 32m
+    disk: 32m
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/gateway.git
+  commit: 906f5de0dd9445f3efeb374dc40a872877a1bd29
+  built_by: eco@0.4.4
+  built_at: 2026-09-30T16:09:05Z
+  target: x86_64-unknown-linux-musl
+release:
+- 3.9.0
+docs:
+- README.md
+- api.md
+- changelog.md
+- examples.sh
+- gotchas.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: IXpG/dc7oOO4kJxAeKDaYC0cwm5reFg2YcfdTn0SEQ/qfMpk526FhIsCJQdE/LjSarwKzOd+v7kL3IEP8JQSBg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
