@@ -1,0 +1,109 @@
+# auth-ui changelog
+
+## 3.8.0 (2026-09-30)
+- **HttpOnly session cookie aware.** On a successful login/signup the UI now
+  honors the auth response's `"cookie": true` hint: it stores only the public
+  user (no raw token) and does not set the `eco_token` cookie from JS — the
+  server already set it HttpOnly. API calls still send `Bearer` when a token is
+  present (legacy mode) and otherwise rely on the cookie. The admin users page
+  treats a cookie-mode session (user present) as signed in. Backward compatible:
+  without the hint, behavior is unchanged.
+
+## 3.7.0 (2026-09-29)
+- **Path-based locales.** Locale now lives in the URL path (`/fr/signin`,
+  `/de/signin`), matching the platform's `/id` `/my` convention — `/` = en.
+  Every page also serves at `/<locale>/…`; the switcher, internal links
+  (forgot/sign-up/sign-in) and the `eco_lang` cookie all follow. The old
+  `?lang=` / `Accept-Language` negotiation still works for the unprefixed
+  paths. Unknown prefixes 404. Routes to declare in an estate: `/fr/signin`,
+  `/fr/signup`, `/fr/forgot-password`, `/fr/reset-password`, `/fr/verify-email`
+  and the `/de/…` equivalents (all public).
+
+## 3.6.2 (2026-09-29)
+- **Language dropdown shows flags.** Options are the locale's flag + endonym
+  (🇬🇧 English · 🇫🇷 Français · 🇩🇪 Deutsch) instead of a bare code.
+
+## 3.6.1 (2026-09-29)
+- **Language switcher is a dropdown.** The locale links that sat in a row are
+  now a single compact `<select>` (English / Français / Deutsch); changing it
+  remembers the choice in `eco_lang` and reloads with `?lang=`. CSS
+  cache-buster is now `?v=10`.
+
+## 3.6.0 (2026-09-29)
+- **Multi-locale pages.** The sign-in, sign-up, forgot-password,
+  reset-password and verify-email pages render in the visitor's language —
+  resolved per request from `?lang=`, the `eco_lang` cookie, then
+  `Accept-Language` (`en`, `fr`, `de`; default `en`). Every page gains a
+  language switcher and sets `<html lang>`. English is the source; a missing
+  translation falls back to English, so an incomplete catalog never breaks a
+  page. The admin `/users` page stays English (internal operator tooling). CSS
+  cache-buster is now `?v=9`.
+
+## 3.5.0 (2026-09-26)
+- **"Remember me" checkbox** on the sign-in page. When ticked, the session is
+  persisted in `localStorage` + a persistent `eco_token` cookie (`Max-Age`);
+  when unticked it is kept in `sessionStorage` + a session-only cookie, so it
+  ends when the browser closes. The `remember` flag is sent to
+  `POST /auth/login` and selects the server-side session lifetime.
+
+## 3.4.1 (2026-09-26)
+- Unify the `auth-ui.css` cache-buster to `?v=7` on every page (the eye-toggle
+  styles landed in the same file).
+
+## 3.4.0 (2026-09-26)
+- **Show/hide password ("eye") toggle** on every password field (sign-in,
+  sign-up, reset-password). New `.pw` / `.pw-toggle` styles in
+  `static/auth-ui.css`; the toggle flips `type=password`↔`text` and reflects
+  state via `aria-pressed`.
+
+## 3.3.0 (2026-09-21)
+- Added the **`/users`** user-management page (gateway route `role:superadmin`):
+  search + pagination + active/deactivated filter, and per-user actions —
+  reset password (email link), deactivate/reactivate, force logout, verify
+  email, edit roles, and create user. There is no set-password action by design.
+
+## 3.2.0 (2026-09-11)
+- Sign-in page shows a **"Sign in with Getecosphere"** link when `OIDC_ENABLED`
+  is set, pointing at the auth LXS `/auth/oidc/login` SSO endpoint.
+
+## 3.1.0 (2026-08-23)
+- Added the white-label `/verify-email?token=…` SSR page used by Auth's
+  secure-by-default verification flow.
+- Added a Darwin/arm64 target and `compose:` recipe so local `eco up dev`
+  has the same Auth UI routes as production.
+
+## 3.0.0 (2026-08-22)
+- Added white-label `/forgot-password` and `/reset-password` SSR pages for the
+  Auth password-recovery contract.
+- Sign-in now links directly to password recovery. Copy remains white-label
+  and includes the required back-to-homepage link.
+
+## 1.0.0 (2026-08-19)
+- Logging contract: service logs now emitted as newline-delimited JSON (NDJSON) to stdout per the platform LXS logging contract (`ts`/`level`/`msg` + optional `service`,`request_id`,`status`,`latency_ms`,`user_id`,`error`). Breaking change — log output format changed.
+
+## 0.4.0 — session cookie for gateway page loads (2026-08-17)
+
+- After a successful signin/signup, auth-ui now also writes an `eco_token`
+  cookie (`Path=/; SameSite=Lax; Max-Age=<token expiry>`) holding the JWT, in
+  addition to `localStorage.eco_session`. Estates can declare
+  `cookie: eco_token` on their `level: auth` page routes so the gateway
+  validates the token from the cookie on plain page loads — no Bearer header
+  needed for navigation. This keeps protected pages behind the gateway
+  (never public) while letting logged-in browsers load them.
+- The cookie is cleared by the estate's own sign-out flow
+  (`document.cookie = "eco_token=; Path=/; Max-Age=0"`).
+
+## 0.3.0 — treat empty AUTH_API_BASE/AUTH_REDIRECT_URL as unset
+
+The estate gateway writes `AUTH_API_BASE=` (empty) into the auth-ui env contract.
+`std::env::var` returns `Ok("")` for that, so the previous
+`unwrap_or_else("/auth-api")` default was bypassed — the signup form posted to
+`/auth/register` instead of `/auth-api/auth/register`, and the gateway returned
+404 → the browser showed "Request failed". The same applied to `AUTH_REDIRECT_URL`.
+Both now trim and treat an empty value as unset, falling back to `/auth-api`
+and `/` respectively. Signup/signin work again on estates whose gateway writes
+the empty optional vars.
+
+## 0.1.0 — initial
+
+White-label signin/signup pages for the auth LXS (Leptos SSR). 1.5 MB binary.
