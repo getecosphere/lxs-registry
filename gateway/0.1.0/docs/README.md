@@ -27,7 +27,7 @@ services:
 ```
 
 Then declare `access.routes` on every HTTP service and an `auth.roles` block.
-`eco up --remote` writes `gateway.json` + the service `.env` and exposes the
+`eco deploy` writes `gateway.json` + the service `.env` and exposes the
 estate through the gateway port.
 
 ## Environment

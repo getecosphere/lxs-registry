@@ -1,0 +1,58 @@
+name: slugify-wasm
+domain: slugify
+version: 0.1.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: "Slugify: text -> URL slug, implemented as a Wasm component run by a native LXS host (wasmtime embedded)"
+
+targets:
+  - linux/amd64
+  - darwin/arm64
+
+artifacts:
+  linux/amd64:
+    path: linux-amd64/slugify-wasm
+    sha256: cb88df8363c549ce35750e6621820e2dd2371e302dbb2548599c06c064e4920b
+    size: 22194000
+  darwin/arm64:
+    path: darwin-arm64/slugify-wasm
+    sha256: 34caff7e938f36cfa1b87fea7d788f3440ff6c05eceb9fd2ff3d8c502c139313
+    size: 26969712
+
+contract:
+  version: 2
+  api: "slugify REST API"
+  env:
+    fields:
+      SERVER_PORT:
+        required: true
+        type: int
+        managed: port
+        description: "Port the slugify API listens on"
+    required:
+      - SERVER_PORT
+    optional: []
+    defaults: {}
+  db: none
+  network:
+    inbound: [http]
+    outbound: []
+  resources:
+    memory: "64m"
+    disk: "128m"
+    startup_seconds: 2
+
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+
+provenance:
+  source: ""
+  commit: ""
+  built_by: ""
+  built_at: ""
+  target: x86_64-unknown-linux-musl
+
+release: [0.1.0]

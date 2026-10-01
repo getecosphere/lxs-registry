@@ -151,7 +151,7 @@
 ## 0.3.0
 
 - Three ways to build, presented as a switchable guide: **CLI** (install eco,
-  `eco init`, `eco lxs add`, `eco up dev`, `eco up --remote` with copy buttons),
+  `eco init`, `eco lxs add`, `eco up dev`, `eco deploy` with copy buttons),
   **IDE** (the composer), and **AI agent** (the Ecosphere Assistant extension +
   OpenCode). No way is assumed on first visit — the chooser is the entry, each
   panel cross-links to the next, and the choice is remembered.
