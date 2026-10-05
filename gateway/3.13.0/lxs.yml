@@ -1,0 +1,218 @@
+name: gateway
+domain: gateway
+version: 3.13.0
+publisher: stuff8
+status: unverified
+license: mit
+summary: 'Estate front door: default-deny HTTP reverse-proxy + authorization middleware (JWT, roles, single-session, strip/rewrite), upstream pool (round-robin + passive health + connect-failure failover/retry), origin overload protection (per-IP rate limit → 429, per-IP/total in-flight caps → 503), SIGHUP hot-reload, /healthz+/readyz, loopback-only /internal/metrics (rolling origin rps/status/top-IPs for the host breach guard), NDJSON access logs, HTTP→HTTPS redirect, optional pre-release gate, baseline security headers, content-negotiated HTML/JSON error pages'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/gateway
+    sha256: 20780ef5eb10a5092471fbe33dd028bb8c4ccd4e7697a97cde1f08ea3de02490
+    size: 5964864
+  linux/amd64:
+    path: linux-amd64/gateway
+    sha256: 26a7b1ec6db68b214565679fc4a03d3ddff7c26510b7e2daa7cb77816ff0844e
+    size: 4799080
+contract:
+  version: 2
+  api: 'gateway: HTTP reverse-proxy + ACL; routes from GATEWAY_CONFIG'
+  env:
+    required:
+    - SERVER_PORT
+    - JWT_SECRET
+    - GATEWAY_CONFIG
+    optional:
+    - AUTH_SESSION_CHECK_URL
+    - SESSION_REQUIRED
+    - RATE_LIMIT_RPS
+    - RATE_LIMIT_BURST
+    - MAX_INFLIGHT_PER_IP
+    - MAX_INFLIGHT_TOTAL
+    - ACCESS_LOG
+    defaults:
+      MAX_INFLIGHT_TOTAL: '0'
+      RATE_LIMIT_BURST: '0'
+      ACCESS_LOG: 'true'
+      SESSION_REQUIRED: 'true'
+      MAX_INFLIGHT_PER_IP: '0'
+      RATE_LIMIT_RPS: '0'
+    fields:
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the gateway listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      JWT_SECRET:
+        required: true
+        type: secret
+        default: ''
+        description: HS512 signing key shared with the estate's auth service
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: shared-jwt
+        example: ''
+      RATE_LIMIT_RPS:
+        required: false
+        type: int
+        default: '0'
+        description: Origin-side per-client-IP request rate (req/s, token bucket). 0 = disabled. Backstop for a distributed flood Cloudflare cannot shed per-IP.
+        group: overload
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      ACCESS_LOG:
+        required: false
+        type: bool
+        default: 'true'
+        description: Emit one NDJSON access-log line per request (method/path/status/latency/client_ip). Never logs tokens, cookies, or bodies.
+        group: overload
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      MAX_INFLIGHT_PER_IP:
+        required: false
+        type: int
+        default: '0'
+        description: Max concurrent in-flight requests per client IP. 0 = disabled. Protects against slow-loris / connection pile-up from one source.
+        group: overload
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      AUTH_SESSION_CHECK_URL:
+        required: false
+        type: url
+        default: ''
+        description: Auth session-status endpoint; the gateway re-validates each protected token's session here (single-session enforcement)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: auth-session-check
+        example: ''
+      RATE_LIMIT_BURST:
+        required: false
+        type: int
+        default: '0'
+        description: Token-bucket burst per IP. 0 with RATE_LIMIT_RPS>0 → 2× rps (min 10).
+        group: overload
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      GATEWAY_CONFIG:
+        required: true
+        type: json
+        default: ''
+        description: Path to the gateway.json route/ACL config written by configgen
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      SESSION_REQUIRED:
+        required: false
+        type: bool
+        default: 'true'
+        description: Reject bearer tokens without a session id (legacy pre-session tokens). Mirrors auth's SESSION_REQUIRED.
+        group: session
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      MAX_INFLIGHT_TOTAL:
+        required: false
+        type: int
+        default: '0'
+        description: Max concurrent in-flight requests across all clients → 503 past the cap. 0 = disabled. The origin's load-shedding backstop.
+        group: overload
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - http
+  resources:
+    memory: 32m
+    disk: 32m
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/gateway.git
+  commit: 27c9805503e64848b0d5e2357878aa987018f447
+  built_by: eco@0.4.4
+  built_at: 2026-10-05T13:25:31Z
+  target: x86_64-unknown-linux-musl
+release:
+- 3.13.0
+docs:
+- README.md
+- api.md
+- changelog.md
+- examples.sh
+- gotchas.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: U3o9mSCCn9WYbxAO2ThYKjbmIRfsxGtkMkPihHAuOzx/lMju9cFRl//fc5cTspBStRfnqYn2iuT+VTTwBTylAA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
