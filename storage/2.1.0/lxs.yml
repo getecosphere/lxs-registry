@@ -1,0 +1,87 @@
+name: storage
+domain: storage
+version: 2.1.0
+publisher: stuff8
+status: unverified
+license: mit
+summary: 'Photos & media: uploads, image/video/audio processing, S3 storage, thumbnails'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/storage
+    sha256: a37693b699a77bcdfe7e142ccdec01cc6952512942c89fcd5a974d4a8b81138e
+    size: 25575696
+  linux/amd64:
+    path: linux-amd64/storage
+    sha256: f8fbffcfec9c38275779780bd9ddb5612dda1d15f2b9d14a46b030f2a3ddc69d
+    size: 21328976
+contract:
+  version: 1
+  api: photos REST API (upload + serve + media metadata)
+  env:
+    required:
+    - SERVER_PORT
+    - API_BASE_URL
+    - S3_ENDPOINT
+    - S3_REGION
+    - S3_BUCKET
+    - S3_ACCESS_KEY
+    - S3_SECRET_KEY
+    optional:
+    - CORS_ALLOWED_ORIGINS
+    - MAX_IMAGE_MB
+    - MAX_DOCUMENT_MB
+    - MAX_IMAGE_PIXELS
+    - MAX_VIDEO_MB
+    defaults:
+      S3_BUCKET: stuff8-storage
+    fields: {}
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - s3
+  resources:
+    memory: 192m
+    disk: 1g
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies:
+  - ffmpeg
+provenance:
+  source: github-getecosphere:getecosphere/storage.git
+  commit: cd8d21f247d117b7d4937f5b9fac83ac98a00325
+  built_by: eco@0.4.4
+  built_at: 2026-10-05T23:13:48Z
+  target: x86_64-unknown-linux-musl
+release:
+- 2.1.0
+docs:
+- README.md
+- api.md
+- changelog.md
+- examples.sh
+- gotchas.md
+- openapi.json
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: jtQLUL1yR7HfD98r2zMxqXLoaarvbTWv6qNkk/9H6vzerGcE4YmyQaH+M1Uf9NiegewdnvckvxxHXSnlL7XzAw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
