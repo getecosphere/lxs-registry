@@ -1,0 +1,106 @@
+# analytics
+
+Privacy-first traffic analytics for Eco estates. One binary, no third-party
+scripts required: a **cookieless first-party beacon** captures pageviews and a
+small **dashboard** shows totals, a realtime counter, a timeline chart, top
+pages, referrers and countries.
+
+## Why
+
+Google Analytics and Cloudflare both answer "how many people visit?", but each
+is per-property, sends (or holds) data elsewhere, and GA needs a consent
+banner. `analytics` is the estate's own data: it lives in your Postgres or on
+disk, is queryable, and composes like every other LXS.
+
+## Two sources, one store
+
+- **First-party beacon (this version).** A tiny `a.js` posts one pageview per
+  load plus a heartbeat every 30s while the tab is visible, to
+  `POST /analytics-beacon/collect`. Cookieless: a visitor is a daily
+  `fnv1a(ip + user-agent + day)` hash — no cookie, no fingerprint kept. Device
+  (desktop/mobile/tablet) is classified from the User-Agent.
+- **Cloudflare / GA4 (planned).** Optional feeds that merge into the same
+  timeline, so "requests (edge)" and "visitors (human)" sit side by side.
+
+## Dashboard
+
+The superadmin dashboard shows: live active users (5 min, GA-style), totals and
+a timeline, a **locations choropleth map** + country list, **devices** donut,
+**new vs returning** donut, **keywords** (from referrers), top pages and top
+referrers. It renders the estate's real header/footer and follows the estate
+light/dark theme.
+
+The world map is [svg-maps/world](https://github.com/VictorCazanave/svg-maps),
+licensed CC BY 4.0.
+
+### App view (`VIEW=app`)
+
+For an OS-style SPA (one URL, app windows) the default dashboard's marketing
+chrome (`/static/style.css`, header/footer, top pages) does not fit. Set
+`VIEW: app` and `/analytics-app` serves a **second, self-contained dashboard**:
+no estate assets, theme-aware (follows the OS theme), **mobile-first**, and led
+by application usage — active now, apps focused right now, top apps, a
+**zoomable realtime timeline**, devices, new-vs-returning and locations. The
+default view is untouched when `VIEW` is omitted.
+
+The timeline chart is interactive: **wheel to zoom** (anchored at the cursor)
+and **drag to pan**, from **1 second to 30 days**, ala Google Analytics — the
+`24 jam / 7 hari / 30 hari` tabs are presets and double-click resets. Bars are
+distinct users per bucket (a heartbeat-like spike train at fine zoom); a
+concurrent-users line (presence window 60s) keeps the pulse continuous. Hover a
+bar for its exact time range and counts. Powered by
+`GET /analytics-app/api/series` over in-memory minute/hour/day rollups.
+
+### Events & in-app traffic
+
+Besides pageviews, the beacon can record **named domain events** —
+`window.ecoAnalytics.event("google_inapp_blocked")` — which are counted in the
+`top_events` array and the “Events” panel, never as pageviews. This is how an
+estate measures a funnel (e.g. blocked sign-ins) without inflating traffic.
+The beacon also detects an **embedded webview** (Instagram/Threads/TikTok/…) and
+tags every event with `wv`; the summary exposes
+`inapp: { pageviews, visitors }` and both dashboards show it.
+
+## Compose
+
+```yaml
+services:
+  analytics:
+    lxs: analytics@0.5.0
+    port: 4300
+    config:
+      DATA_DIR: /var/lib/eco-analytics/<estate>
+      SITE: <estate>
+      VIEW: app          # omit for the default (marketing) dashboard
+    access:
+      routes:
+        - { path: /analytics-beacon, level: public }
+        - { path: /analytics-beacon/*, level: public }
+        - { path: /analytics-app, level: role:superadmin, cookie: eco_token }
+        - { path: /analytics-app/*, level: role:superadmin, cookie: eco_token }
+```
+
+Then add the beacon to the estate's pages:
+
+```html
+<script defer src="/analytics-beacon/a.js" data-site="my-estate"></script>
+```
+
+Open `/analytics-app` as a `superadmin` to see the dashboard.
+
+## Env
+
+| Var | Default | Role |
+|---|---|---|
+| `SERVER_PORT` | `4300` | listen port |
+| `DATA_DIR` | `./data` | directory for `events.ndjson` (persist across deploys) |
+| `SITE` | `default` | site label recorded on every event |
+
+## Storage
+
+v0.1 appends NDJSON to `DATA_DIR/events.ndjson` and keeps events in memory for
+aggregation. Postgres/SQLite backends land in v0.2 behind the same API.
+
+## Logging
+
+NDJSON to stdout, per the Eco LXS logging contract.
