@@ -1,0 +1,269 @@
+name: goldback-dcs-core
+domain: goldback-dcs
+version: 0.1.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: Goldback DCS core — salam acquisition, FIFO inventory-unit queue, HPP withholding, 50/50 realized-profit waterfall, investor reports
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/goldback-dcs-core
+    sha256: 29ffd4944feda29f7b44476c9daf1cfdd55b4c8c538170b2fedf9fd9d4c4e60d
+    size: 9824272
+  linux/amd64:
+    path: linux-amd64/goldback-dcs-core
+    sha256: b41c974ed5517516a17308c2eae5313cce4db9d616faca55cd192e786bd07535
+    size: 8061008
+contract:
+  version: 2
+  api: Goldback DCS REST API (/api/*)
+  env:
+    required:
+    - SERVER_PORT
+    - DATABASE_URL
+    - JWT_SECRET
+    optional: []
+    defaults: {}
+    fields:
+      DATABASE_URL:
+        required: true
+        type: secret
+        default: ''
+        description: PostgreSQL connection string (DCS store)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_INTERNAL_TOKEN:
+        required: false
+        type: string
+        default: ''
+        description: Token that lets sibling services record sales
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_DEFAULT_PROFIT_RATE_BPS:
+        required: false
+        type: int
+        default: '5000'
+        description: Holder cap rate in basis points (5000 = +50%)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_RWID_SHARE_PCT:
+        required: false
+        type: int
+        default: '50'
+        description: RWID profit share percentage
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the DCS API listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      DCS_UNIT_RUPIAH:
+        required: false
+        type: int
+        default: '2500000'
+        description: Historical RWID Prime unit price in Rupiah (reference)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_DEFAULT_HPP_UNIT:
+        required: false
+        type: int
+        default: '0'
+        description: Seed HPP (unused in the revenue-share model)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_INVESTOR_SHARE_PCT:
+        required: false
+        type: int
+        default: '50'
+        description: Share of each sale allocated to the holder
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_SALE_NOTIFY_KEY:
+        required: false
+        type: string
+        default: sales
+        description: Binding key the sale notification targets
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_SALE_NOTIFY_URL:
+        required: false
+        type: string
+        default: ''
+        description: 'Optional: on each sale POST {"key","text"} here (e.g. the estate telegram LXS send endpoint). Best-effort.'
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_DEFAULT_RETAIL_UNIT:
+        required: false
+        type: int
+        default: '2500'
+        description: Seed retail price per unit (ecoin)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_TENANT:
+        required: false
+        type: string
+        default: rwid
+        description: Economy namespace
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      CORS_ALLOWED_ORIGINS:
+        required: false
+        type: string
+        default: http://localhost:3000
+        description: Comma-separated allowed origins
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DCS_RATE_RUPIAH:
+        required: false
+        type: int
+        default: '1000'
+        description: Rupiah per ekoin (history conversion)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      JWT_SECRET:
+        required: true
+        type: secret
+        default: ''
+        description: Shared estate JWT secret used to verify user tokens
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: postgresql@15
+  network:
+    inbound:
+    - http
+    outbound:
+    - https
+    - http
+  resources:
+    memory: 160m
+    disk: 256m
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: ''
+  commit: 5e47784b50cc07139af6d6964ed94a42508a5ed4
+  built_by: eco@0.4.4
+  built_at: 2026-10-06T22:11:06Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.1.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: GCbu58ARLGkLDD/ctmesqPJzGYnlfkJVUIOnTWHrTzuwOC+Hz92+efx3aBqKjv0UE1iqfCmfZyBFguWoqp5CCw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
