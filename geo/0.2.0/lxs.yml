@@ -1,0 +1,155 @@
+name: geo
+domain: geo
+version: 0.2.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: 'Reusable IP → location: resolve an IP (or the caller''s own IP) to country/city/coordinates via an offline MaxMind-DB or an HTTP geo API. Used for ''last seen in <city>'' and signup-origin.'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/geo
+    sha256: febdb52c1a96e06a6099a59f3a3d241b9eb1dbd79e261e8b2bd9772a2e11805d
+    size: 4395120
+  linux/amd64:
+    path: linux-amd64/geo
+    sha256: a26ab541fa089a3f5bd5dfa2789fe9065b9216fcdea7c44f98b4aed06ee44315
+    size: 3699048
+contract:
+  version: 2
+  api: 'geo: GET /api/health, GET /api/whereami, GET /api/lookup?ip='
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - CORS_ALLOWED_ORIGINS
+    - GEO_DB
+    - GEO_URL
+    - API_BASE_PATH
+    defaults: {}
+    fields:
+      API_BASE_PATH:
+        required: false
+        type: string
+        default: /api
+        description: Internal API base path — tells peers (e.g. auth) where this service's API is rooted for direct calls.
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      CORS_ALLOWED_ORIGINS:
+        required: false
+        type: csv-url
+        default: ''
+        description: Origins allowed to call this API
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: cors-origins
+        example: ''
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the geo service listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      GEO_DB:
+        required: false
+        type: string
+        default: ''
+        description: Absolute path to an ip→city MaxMind-DB (.mmdb; GeoLite2-City or DB-IP Lite) for offline geo. Empty = use GEO_URL.
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      GEO_URL:
+        required: false
+        type: string
+        default: ''
+        description: HTTP geo base when no offline DB is set (default http://ip-api.com/json).
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - http
+  resources:
+    memory: 32m
+    disk: 32m
+    startup_seconds: 5
+  health:
+    path: /api/health
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: github-getecosphere:getecosphere/geo.git
+  commit: 5bde8dfafc55a1d7903351b0fee6077982b12721
+  built_by: eco@0.4.4
+  built_at: 2026-10-07T23:03:15Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.2.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: geo-backend
+    port: 4212
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes:
+      - path: /api/geo/health
+        level: public
+        strip: /api/geo
+        rewrite: /api
+        cookie: ''
+      - path: /api/geo/whereami
+        level: public
+        strip: /api/geo
+        rewrite: /api
+        cookie: ''
+      - path: /api/geo/lookup
+        level: public
+        strip: /api/geo
+        rewrite: /api
+        cookie: ''
+  auth:
+    email_verification:
+      enabled: null
+attestation: kgv5zI3m3ACyarewyErMb/OL0gK0FE4I88sGKMK9gE2TkEBZMUVDU8SOS1RoHkSaPxlcc9nBtURr5ITB4sJFBw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
