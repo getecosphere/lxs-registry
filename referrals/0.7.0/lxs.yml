@@ -1,0 +1,191 @@
+name: referrals
+domain: referrals
+version: 0.7.0
+publisher: getecosphere
+status: unverified
+license: mit
+summary: Referral codes & signup attribution (with UTM source tracking) — RWID / investor / pool ownership, per-user affiliate codes, claims, referrals list, realtime referral notifications, and ownership report
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/referrals
+    sha256: 45a79fc52870dbbb4c47612ce7dfe03d6d5aa757722fbd22b08471bcba22cd3f
+    size: 16668160
+  linux/amd64:
+    path: linux-amd64/referrals
+    sha256: 37aa1d0d51fafccb8393a132c0d234237e510fc3203a63ce88daa63b36ec7724
+    size: 14104816
+contract:
+  version: 2
+  api: referrals REST API (/api/*)
+  env:
+    required:
+    - SERVER_PORT
+    - MONGODB_URI
+    - JWT_SECRET
+    optional: []
+    defaults: {}
+    fields:
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      REFERRALS_DEFAULT_CODE:
+        required: false
+        type: string
+        default: rwid
+        description: Fallback referral code
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_BASE_URL:
+        required: false
+        type: string
+        default: ''
+        description: ekoin LXS base URL; pays the referral bonus to code owners
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      EKOIN_SERVICE_TOKEN:
+        required: false
+        type: string
+        default: ''
+        description: Service token for the ekoin internal API (x-ekoin-token)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      REFERRAL_BONUS_EKOIN:
+        required: false
+        type: int
+        default: '10'
+        description: ekoin granted to a code owner per successful sign-up (0 = disabled)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      REFERRALS_SERVICE_TOKEN:
+        required: false
+        type: secret
+        default: ''
+        description: Token guarding the inbound /api/internal/* API (x-referrals-token)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      MONGODB_URI:
+        required: true
+        type: secret
+        default: ''
+        description: MongoDB URI
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      JWT_SECRET:
+        required: true
+        type: secret
+        default: ''
+        description: Shared JWT secret
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      CORS_ALLOWED_ORIGINS:
+        required: false
+        type: string
+        default: http://localhost:3000
+        description: Allowed origins
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: mongodb@7
+  network:
+    inbound:
+    - http
+    outbound:
+    - https
+    - http
+  resources:
+    memory: 128m
+    disk: 256m
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: git@github.com:getecosphere/referrals.git
+  commit: c4dbd28bea4a87f1746b8cf5885ee7c5dcf64f11
+  built_by: eco@0.4.4
+  built_at: 2026-10-08T14:09:36Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.7.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: A2/2iyiKBO7TlIK1vUbOWwSLOGN0d5BddVRm2ZWgJSOTnLqkjwiJzh3drQOHmaITpUXyIBsc46rQxoXfOVc4AQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
