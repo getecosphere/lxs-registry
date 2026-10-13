@@ -2,7 +2,7 @@ name: gateway
 domain: gateway
 version: 3.12.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Estate front door: default-deny HTTP reverse-proxy + authorization middleware (JWT, roles, single-session, strip/rewrite), upstream pool (round-robin + passive health + connect-failure failover/retry), origin overload protection (per-IP rate limit → 429, per-IP/total in-flight caps → 503), SIGHUP hot-reload, /healthz+/readyz, NDJSON access logs, HTTP→HTTPS redirect, optional pre-release gate, baseline security headers, content-negotiated HTML/JSON error pages'
 targets:

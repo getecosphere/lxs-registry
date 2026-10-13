@@ -2,7 +2,7 @@ name: gameserver
 domain: gameserver
 version: 0.1.1
 publisher: kelastanpatembok
-status: unverified
+status: verified
 license: mit
 summary: 'Chronic Battle realtime game server (Colyseus WebSocket): rooms, PvP battles, and player/world persistence.'
 targets:

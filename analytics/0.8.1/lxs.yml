@@ -2,7 +2,7 @@ name: analytics
 domain: analytics
 version: 0.8.1
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: Privacy-first traffic analytics — cookieless first-party pageview beacon + realtime dashboard, with an optional `app` view dimension for OS-style SPAs; Cloudflare/GA sources plug in as optional feeds
 targets:

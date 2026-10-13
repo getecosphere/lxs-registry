@@ -2,7 +2,7 @@ name: ekoin
 domain: ekoin
 version: 0.3.2
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: 'ekoin — intrinsic currency wallet: double-entry coin ledger, campaign claim, top-up invoices (simulated/Midtrans), purchases, revenue & accounting reports'
 targets:

@@ -2,7 +2,7 @@ name: notes
 domain: notes
 version: 0.4.0
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: notes — macOS-Notes-style per-user notes (MongoDB) with a self-contained UI
 targets:

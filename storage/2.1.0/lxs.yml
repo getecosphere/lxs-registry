@@ -2,7 +2,7 @@ name: storage
 domain: storage
 version: 2.1.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Photos & media: uploads, image/video/audio processing, S3 storage, thumbnails'
 targets:

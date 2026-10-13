@@ -2,7 +2,7 @@ name: presence
 domain: presence
 version: 0.7.0
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: 'Realtime presence hub — fan-out join/login pulses over SSE to light up the RWID globe (privacy-first: first name only)'
 targets:

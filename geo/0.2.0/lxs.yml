@@ -2,7 +2,7 @@ name: geo
 domain: geo
 version: 0.2.0
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: 'Reusable IP → location: resolve an IP (or the caller''s own IP) to country/city/coordinates via an offline MaxMind-DB or an HTTP geo API. Used for ''last seen in <city>'' and signup-origin.'
 targets:

@@ -2,7 +2,7 @@ name: compose
 domain: compose
 version: 0.11.0
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: Estate composer — say what work you do, see the app it could become, then compose it from reusable Linux Services and take the exact ecompose.yml home
 targets:

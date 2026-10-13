@@ -2,7 +2,7 @@ name: profile
 domain: profile
 version: 2.2.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'User profiles: bio, experience, education, skills, certifications, links, avatars'
 targets:

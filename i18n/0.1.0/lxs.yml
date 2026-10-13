@@ -2,7 +2,7 @@ name: i18n
 domain: i18n
 version: 0.1.0
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: 'Translation catalogs as a service: versioned message catalogs served over HTTP with stable ETags, so estates localize content without rebuilding'
 targets:
