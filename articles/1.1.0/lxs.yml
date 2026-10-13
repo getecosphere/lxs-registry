@@ -2,7 +2,7 @@ name: articles
 domain: articles
 version: 1.1.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Articles & content: CRUD, categories, search, admin publishing workflow'
 targets:
@@ -71,3 +71,5 @@ docs:
 - README.md
 - api.md
 - changelog.md
+attestation: 4Zn5NZuhIAh+d8vly0F3brIE4GaJ1bdMmnMucSzpMditSqaluz/DTOVFsiR9IwPXe9yRG7x0au+6oE9WVs52DA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

@@ -2,7 +2,7 @@ name: notifications
 domain: notifications
 version: 1.0.1
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Notifications: in-app + email delivery, per-tenant channels, WebSocket push'
 targets:
@@ -47,3 +47,5 @@ provenance:
   target: x86_64-unknown-linux-musl
 release:
 - 1.0.1
+attestation: 3CGlrS+H3X0heoE7V05zttYPl0E1UbwcXzNgvT4GeYYpc2IbWk7ySRzl0pvNqqiBZvGuxBeWOnSVVRVzphN5Cw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

@@ -2,7 +2,7 @@ name: auth-ui
 domain: auth
 version: 0.3.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: White-label signin/signup pages for the auth domain (Leptos SSR)
 targets:
@@ -49,3 +49,5 @@ docs:
 - api.md
 - changelog.md
 - gotchas.md
+attestation: DHkm9jekjN4adc5ttjXiEWBPS4pVFskoNGFjSL3mzFa0UNHsFmqW4SUmkcbQXdRXFRHC2eCfo1dC3DxbXoGbCg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

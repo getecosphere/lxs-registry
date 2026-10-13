@@ -2,7 +2,7 @@ name: gateway
 domain: gateway
 version: 0.1.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Estate front door: default-deny HTTP reverse-proxy + authorization middleware (JWT, roles, strip/rewrite)'
 targets:
@@ -70,3 +70,5 @@ docs:
 - changelog.md
 - examples.sh
 - gotchas.md
+attestation: GFSZ0AHmcW9OfRM9+jpymDtmXgDDXpVPaK2qPdcwbeRprGKTnkOYG3MroVsqgDI7J3S0EdPKZcULNjVe/LftAg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

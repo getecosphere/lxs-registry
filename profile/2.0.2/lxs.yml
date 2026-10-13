@@ -2,7 +2,7 @@ name: profile
 domain: profile
 version: 2.0.2
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'User profiles: bio, experience, education, skills, certifications, links, avatars'
 targets:
@@ -64,3 +64,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: y+zUJk7ab6np3qLkSn8sNx1lUJlxXzDcfmCX7m6GNaBB9AilV0iAq1tcBAD9kyMZUMsnbAr1IUYayiBUE/ZECw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

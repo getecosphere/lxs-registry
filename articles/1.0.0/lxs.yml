@@ -2,7 +2,7 @@ name: articles
 domain: articles
 version: 1.0.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Articles & content: CRUD, categories, search, admin publishing workflow'
 category: Content
@@ -47,3 +47,5 @@ provenance:
   target: x86_64-unknown-linux-musl
 release:
 - 1.0.0
+attestation: nXqPUEhYdo1jP2FHDqzQ9gB77xNJVEBdJmIK+pXNvBB5UPGDDWGi/Esf/65NZsVhO1JMCt+CB6ysToE+UmTxAQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

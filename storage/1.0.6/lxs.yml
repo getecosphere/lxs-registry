@@ -2,7 +2,7 @@ name: storage
 domain: storage
 version: 1.0.6
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Photos & media: uploads, image/video processing, S3 storage, thumbnails'
 targets:
@@ -66,3 +66,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: Lb5EjUVo9xP3OJnBB/UKBGINKYRAm1/WXNSRi0h9ePTUX9ewsWXnMUpHWCvZrCpOE01q36XjBGXd9YUi7+FABA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

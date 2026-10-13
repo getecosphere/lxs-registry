@@ -2,7 +2,7 @@ name: email-manager
 domain: email-manager
 version: 2.1.3
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Email: transactional delivery via Brevo, templates, rate limits, warmup'
 targets:
@@ -59,3 +59,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: LVHeUo/ahdIdKTmiJDtNgwPqOv1ngz5QvSEQkcvcTk92SrJug59dfQqxxcNuqX4E/KuUf+WiDiSJOnYO9eyuDg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

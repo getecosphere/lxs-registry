@@ -2,7 +2,7 @@ name: auth
 domain: auth
 version: 3.4.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Authentication: login, register, JWT, single active session, email verification, signup events'
 targets:
@@ -495,3 +495,5 @@ compose:
   auth:
     email_verification:
       enabled: true
+attestation: +dtoUHjoq4BydsbVJBoQt5436zwjfSMcHm8xDw5KcKN5FsZ25Q/aOD9QbqJq7MpPJoIoDW53NX9lhdNShAoaCw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

@@ -2,7 +2,7 @@ name: ecobook
 domain: ecobook
 version: 1.1.0
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: Ecobook — a reusable portrait book reader (Phaser.js) with a Rust axum book API and portable markdown deck-document import/export
 targets:
@@ -64,3 +64,5 @@ docs:
 - changelog.md
 - examples.sh
 - gotchas.md
+attestation: kehOh1Q7x/Iz4uOla2MBCOeNB262ILH1cyFtH9IwuxNYYzCo5TaxvpLzL2p4zs1lZ3zMG7iA12LuNh7dIc1ZAg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

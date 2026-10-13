@@ -2,7 +2,7 @@ name: slugify-wasm
 domain: slugify
 version: 0.1.0
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: "Slugify: text -> URL slug, implemented as a Wasm component run by a native LXS host (wasmtime embedded)"
 
@@ -56,3 +56,5 @@ provenance:
   target: x86_64-unknown-linux-musl
 
 release: [0.1.0]
+attestation: Xo1aKOV3NOwz3S2QwEMkt/LYhkba/UajnlmnJR/eVTsy/3xVA0AVXe6LOw+lEd0xFHdLX7bxizra9P8XdOlmAA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

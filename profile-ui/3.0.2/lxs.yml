@@ -2,7 +2,7 @@ name: profile-ui
 domain: profile
 version: 3.0.2
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'White-label profile settings UI: avatar, name, bio, and password change (Leptos SSR)'
 targets:
@@ -63,3 +63,5 @@ compose:
   auth:
     email_verification:
       enabled: null
+attestation: ypRToyYLZSyz8pok/qkDHnPhXpwVXZ3FTaKuJdm5nc9ijIuvc9OsjXpK2fAKWrGBJyAka4aV0vepaGfd7OusAA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

@@ -2,7 +2,7 @@ name: profile
 domain: profile
 version: 1.0.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'User profiles: bio, experience, education, skills, certifications, links'
 category: Identity
@@ -49,3 +49,5 @@ provenance:
   target: x86_64-unknown-linux-musl
 release:
 - 1.0.0
+attestation: 1SM/AsEqunMgduJHA044gPxIJsJkDgA/g4zc4We4vTjSrL+UUCMYc8/N8tOW0VvERnJz6IfSpXvC31QNOn5/Dg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

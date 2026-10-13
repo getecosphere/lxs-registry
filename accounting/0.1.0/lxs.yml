@@ -2,7 +2,7 @@ name: accounting
 domain: accounting
 version: 0.1.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'General ledger: journal entries, trial balance, P&L, balance sheet, periods, audit trail for expense/income tracking and payment recording'
 targets:
@@ -88,3 +88,5 @@ docs:
 - README.md
 - api.md
 - changelog.md
+attestation: qCjeKW1f770tqxiMsDuTnh3rpUKygSsH834rpPWdOP8kT9ldFephxSal/IR51dW+n4C1BO2umjdY5wfyb0pLCA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

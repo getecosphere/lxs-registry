@@ -2,7 +2,7 @@ name: auth
 domain: auth
 version: 1.1.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: "Authentication: login, register, JWT, email verification"
 
@@ -63,3 +63,5 @@ provenance:
   target: x86_64-unknown-linux-musl
 
 release: []
+attestation: C1QSlWlhJ7fiE+2gHALgeXtqZykHxDCk5eZ2JdgyXRz09skTyEDcPfjqxW2f5KxBg4N0jZ84wyJGaVYwjz9wBQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

@@ -2,7 +2,7 @@ name: logging
 domain: logging
 version: 1.0.6
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: 'Observability LXS: provisions VictoriaLogs (scope: host) and forwards NDJSON logs from estates/services to it (agent)'
 targets:
@@ -65,3 +65,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: NURTZ+sOccJRNJNb/C6EDDDnqVpA8z9o1wlQjW9hLkrbw/PBca2KsW0t+fF9cCe9iZHiSP1PP5zI0Z9Uwc50Dw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

@@ -2,7 +2,7 @@ name: auth
 domain: auth
 version: 1.0.2
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Authentication: login, register, JWT, email verification, avatars'
 targets:
@@ -65,3 +65,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: wJ95jTpjrXYfBeKClU1TvQPgmj+GuZPEM5fh5EetoixulB+C/wTTlRAo7JFPWiToKWt5gEF5IKS8znUeD5PTDA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

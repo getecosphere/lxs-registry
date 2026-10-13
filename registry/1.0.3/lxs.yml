@@ -2,7 +2,7 @@ name: registry
 domain: registry
 version: 1.0.3
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: LXS Registry — browse and categorize versioned Linux Services from the getecosphere/lxs-registry repository (single binary serves the browse UI and the JSON API)
 targets:
@@ -57,3 +57,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: OaSS5G9ni/AbaxjoHALaQKDomudwCbQicDKMq1pKZ16iyH4FaEOMiuPFo8wevKgWc1u7Axo68nwRL4qrUkVRCg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

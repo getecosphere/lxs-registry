@@ -2,7 +2,7 @@ name: articles-ui
 domain: articles
 version: 0.2.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Standalone native SSR UI for the articles domain: /articles + /articles/[slug] with SEO/OpenGraph'
 targets:
@@ -54,3 +54,5 @@ docs:
 - README.md
 - api.md
 - changelog.md
+attestation: 4AYPppdflnMBj71vn9mWF30R04qG/Ool2MbSB+RbEzu//CxNwAjl1k9oDTpYOJ/jxVg2oYm1+ViglZvmG3+MCA==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

@@ -2,7 +2,7 @@ name: chat
 domain: chat
 version: 1.0.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Chat: realtime messaging via WebSocket, presence, Redis pub/sub'
 category: Communication
@@ -51,3 +51,5 @@ provenance:
   target: x86_64-unknown-linux-musl
 release:
 - 1.0.0
+attestation: RR1Nv/FkD2ivmNTrlPyR4TP8I9ZFxDeniM28fu3bmN0CsKsVKKbknZFj5G3ve1zSIky82x65wDy3b7xNkbGgBw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

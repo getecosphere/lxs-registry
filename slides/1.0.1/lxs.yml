@@ -2,7 +2,7 @@ name: slides
 domain: slides
 version: 1.0.1
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: Slides — slide decks (books), editor prefs, image/poll-template libraries, poll votes, and reader sessions
 targets:
@@ -65,3 +65,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: Nn8idaUIoZ0hgHQ+jiC4rk6gqsoTbNSVvV0rDZuuNk/AKs2N+GUGwJvXM3TlM7Z199pd4q48t5uzH3OM4luBAw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

@@ -2,7 +2,7 @@ name: auth
 domain: auth
 version: 3.3.1
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Authentication: login, register, JWT, single active session, email verification, signup events'
 targets:
@@ -401,3 +401,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: 4U6HMzAIp19lDkoEs6saC19NcpIWBwmkYoUV/90dHM4scQb9MQdr38nlqPl46JvsaVFk/jtNY18Qba8EDHMfAQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

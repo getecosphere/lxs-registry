@@ -2,7 +2,7 @@ name: storage
 domain: storage
 version: 1.0.3
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Photos & media: uploads, image/video processing, S3 storage, thumbnails'
 targets:
@@ -55,3 +55,5 @@ provenance:
   target: x86_64-unknown-linux-musl
 release:
 - 1.0.3
+attestation: KDWpxZS/EHhS/2KA05A3DrFcP0SciCKR3uLi0qs0nH+R4NMhquRpIMImhIE23SkaVVIiqMfzFpGoKGaiTHnZCQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

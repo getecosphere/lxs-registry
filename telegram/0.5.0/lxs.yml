@@ -2,7 +2,7 @@ name: telegram
 domain: telegram
 version: 0.5.0
 publisher: getecosphere
-status: unverified
+status: verified
 license: mit
 summary: 'Telegram: bot channel for an estate — outbound push, inbound replies, ask/answer conversations'
 targets:
@@ -70,3 +70,5 @@ compose:
   auth:
     email_verification:
       enabled: null
+attestation: bSPJf/SmZhPkfyRFhpsjZToGOfqP5RydQPrR12gJ76FHAKzzOD1X3Qb63YhIb0cC1GEcRWH8/gcx9xk3qfQfAQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

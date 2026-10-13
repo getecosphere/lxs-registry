@@ -2,7 +2,7 @@ name: profile-ui
 domain: profile
 version: 1.0.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: White-label profile edit page (name, avatar, cover) for the profile domain (Leptos SSR)
 targets:
@@ -54,3 +54,5 @@ docs:
 - api.md
 - changelog.md
 - gotchas.md
+attestation: QT1h4DSxfHzGVrRWNs8rviO/OQsp3fk7gPs7MKv64jzDKXEDnabyVb7FM0/1VFRDvgs4rl9u742NwkL370/KAQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=

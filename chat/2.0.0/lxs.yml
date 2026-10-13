@@ -2,7 +2,7 @@ name: chat
 domain: chat
 version: 2.0.0
 publisher: stuff8
-status: unverified
+status: verified
 license: mit
 summary: 'Chat: realtime messaging via WebSocket, presence, Redis pub/sub'
 targets:
@@ -64,3 +64,5 @@ docs:
 - examples.sh
 - gotchas.md
 - openapi.json
+attestation: 3/8yXIMQa8WxhGQKwuBX55o4+AeuyNxCTp+0OYgZ/lSgDcarr3D4lSgmD1ZfI7QVKKFyNtrLusY8xp6kaIELBg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
