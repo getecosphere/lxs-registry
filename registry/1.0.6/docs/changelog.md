@@ -1,0 +1,37 @@
+# Changelog
+
+## 1.0.6
+- Fix: with `LXS_REGISTRY_CACHE` empty the cache now defaults to `$STATE_DIRECTORY/registry`
+  (the systemd-writable dir) instead of the root-owned `/var/lib/lxs-registry`, where the
+  service user's `git pull` failed silently and froze the catalog. A failed pull is now logged.
+
+## 1.0.5
+- Ship a `darwin/arm64` build so local `eco up dev` on macOS runs the real LXS
+  instead of skipping it. No API change.
+
+## 1.0.4
+- `/api/lxs` and `/api/lxs/:name` add `signed` (release carries a publisher attestation)
+  and `maturity` (usage-proof level from the registry's `maturity.json`, or `null`).
+
+## 1.0.3
+- Fix: an empty `LXS_REGISTRY_CACHE` env value now falls back to the default
+  `/var/lib/lxs-registry` instead of scanning the empty string (which made the
+  API return zero packages when `.env` declared `LXS_REGISTRY_CACHE=`).
+
+## 1.0.2
+- **Single combined binary**: the browse UI (Leptos SSR) and the JSON API are
+  now one LXS — `/` and `/lxs/:name` render the UI, `/api/*` serves the API, all
+  same-origin on one `SERVER_PORT`. The old split backend/frontend pair is gone;
+  compose this one service.
+- Removed the separate Actix `backend/` crate (its `/api/*` routes moved into
+  the frontend axum app).
+
+## 1.0.1
+- Backend now serves each LXS's docs bundle: `/api/lxs` cards gain
+  `docs_available`; `/api/lxs/:name` gains a `docs` object with the version's
+  README/api/examples/changelog/gotchas contents and `has_openapi`.
+- Ships the `docs/` bundle (README, api, changelog, examples, openapi, gotchas).
+
+## 1.0.0
+- Initial release: clone/refresh `getecosphere/lxs-registry`, parse `lxs.yml`,
+  serve `/api/lxs`, `/api/lxs/categories`, `/api/lxs/:name`.

@@ -1,0 +1,77 @@
+name: registry
+domain: registry
+version: 1.0.6
+publisher: getecosphere
+status: verified
+license: mit
+summary: LXS Registry — browse and categorize versioned Linux Services from the getecosphere/lxs-registry repository (single binary serves the browse UI and the JSON API)
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  linux/amd64:
+    path: linux-amd64/registry
+    sha256: b87461e561c15a4a8d1d62bb341978c0218d4c4fd805a94a7619ed42e388d96c
+    size: 2522136
+  darwin/arm64:
+    path: darwin-arm64/registry
+    sha256: 6760027e8a8303665e5f4d6516e0ce2d799ee0ea644b02473fd70a33ac6c75e4
+    size: 3225968
+contract:
+  version: 1
+  api: registry browse UI (/, /lxs/:name) + JSON API (/api/lxs, /api/lxs/categories, /api/lxs/:name)
+  env:
+    required:
+    - SERVER_PORT
+    - LXS_REGISTRY_CACHE
+    optional:
+    - PORT
+    defaults: {}
+    fields: {}
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - https
+  resources:
+    memory: 128m
+    disk: 512m
+    startup_seconds: 10
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies:
+  - git
+provenance:
+  source: https://github.com/getecosphere/registry.git
+  commit: 3a469df1a3228e39371fd8093b503bb74627590f
+  built_by: eco@0.4.5
+  built_at: 2026-10-13T07:05:21Z
+  target: x86_64-unknown-linux-musl
+release:
+- 1.0.6
+docs:
+- README.md
+- api.md
+- changelog.md
+- examples.sh
+- gotchas.md
+- openapi.json
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: Ec8UgXfdSuspzd0TsiQT8NejLetIFifRAdjGCn/WyoNsYN3lkyKcEQfNCGjkvSRHTXP7OUeGri2w9hkJlAI/Cw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
