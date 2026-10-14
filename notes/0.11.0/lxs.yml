@@ -1,0 +1,95 @@
+name: notes
+domain: notes
+version: 0.11.0
+publisher: getecosphere
+status: verified
+license: mit
+summary: notes — macOS-Notes-style per-user notes (MongoDB) with a self-contained UI
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/notes
+    sha256: a1ed09f69b496dd53dac6ed3f6b10bdbeb0224bc9bd862cc719488ac39bae307
+    size: 12240096
+  linux/amd64:
+    path: linux-amd64/notes
+    sha256: 57fef4c81d3e4021ea8a7e4bcbe843120fe27808c438fe5814ced822a20228e4
+    size: 10545072
+contract:
+  version: 1
+  api: 'notes: GET/POST /api/notes, PUT/DELETE /api/notes/{id}, GET /api/notes/sync, PUT /api/notes/{id}/sync, GET /api/notes/quota, POST/DELETE /api/notes/{id}/images, GET /notes-app (UI)'
+  env:
+    required:
+    - MONGODB_URI
+    - JWT_SECRET
+    - SERVER_PORT
+    optional:
+    - BIND_ADDR
+    defaults: {}
+    fields: {}
+  db: mongodb
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 64m
+    disk: 64m
+    startup_seconds: 5
+  health:
+    path: /api/health
+    readiness: /api/health
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: git@github.com:getecosphere/notes.git
+  commit: 6e3a4d0edf037ecb6f9f8b6eedce6e119d0b2c96
+  built_by: eco@0.4.6
+  built_at: 2026-10-14T13:24:01Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.11.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: notes-backend
+    port: 4301
+    grants:
+      secrets:
+      - JWT_SECRET
+      - MONGODB_URI
+    config: {}
+    access:
+      routes:
+      - path: /notes-app
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /notes-app/*
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /api/notes
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /api/notes/*
+        level: auth
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+  auth:
+    email_verification:
+      enabled: null
+attestation: Av4z9ffO7Dmu770za5RXx3PGbcnod/5WPrkrvL/eVAEDDjNghFa+l63SwkYoZ3T4otJNefsXXePhS0/MqZo5Aw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
