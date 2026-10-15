@@ -1,0 +1,114 @@
+name: email-manager
+domain: email-manager
+version: 4.0.0
+publisher: stuff8
+status: verified
+license: mit
+summary: 'Email for an estate: branded templates with an admin UI (draft, preview, publish, history), queued delivery via Brevo, suppression, GDPR retention and erasure, one-click unsubscribe'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  linux/amd64:
+    path: linux-amd64/email-manager
+    sha256: cc7c6f451715e76db9da208c5000621aa2f23ca8c628da8e431a646d67e5e1be
+    size: 15556072
+  darwin/arm64:
+    path: darwin-arm64/email-manager
+    sha256: 0fcccfc7b5c8c557c29ba49a7c649b32ed2262b7705bb7da94bdc5c94b8049fc
+    size: 17932816
+contract:
+  version: 1
+  api: 'service API /api/email/* (Bearer EMAIL_SERVICE_TOKEN): send, batch, send-template, templates, templates/defaults (domains register their own), status, unsubscribe, privacy/export, privacy/erase · admin UI /email-admin (role:superadmin) · public /email/unsubscribe'
+  env:
+    required:
+    - SERVER_PORT
+    - API_BASE_PATH
+    - MONGODB_URI
+    - BREVO_API_KEY
+    - MAIL_FROM_EMAIL
+    - MAIL_FROM_NAME
+    optional:
+    - EMAIL_PER_RECIPIENT_DAY
+    - EMAIL_GLOBAL_PER_HOUR
+    - EMAIL_WARMUP_MAX_PER_HOUR
+    - EMAIL_WARMUP_DAYS
+    - EMAIL_SERVICE_TOKEN
+    - AUTH_BASE_URL
+    - EMAIL_MANAGER_PUBLIC_URL
+    - EMAIL_BRAND_NAME
+    - EMAIL_BRAND_URL
+    - EMAIL_BRAND_LOGO_URL
+    - EMAIL_BRAND_COLOR
+    - EMAIL_BRAND_TAGLINE
+    - EMAIL_SUPPORT_EMAIL
+    - EMAIL_POSTAL_ADDRESS
+    - EMAIL_BODY_RETENTION_DAYS
+    - EMAIL_LOG_RETENTION_DAYS
+    defaults: {}
+    fields: {}
+  db: mongodb@7
+  network:
+    inbound:
+    - http
+    outbound:
+    - https
+  resources:
+    memory: 128m
+    disk: 256m
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/email-manager.git
+  commit: 49c8e881e8b166a99f5d047c07e9c5dc921f661f
+  built_by: eco@0.4.6
+  built_at: 2026-10-15T14:11:44Z
+  target: x86_64-unknown-linux-musl
+release:
+- 4.0.0
+docs:
+- README.md
+- api.md
+- changelog.md
+- examples.sh
+- gotchas.md
+- openapi.json
+compose:
+  service:
+    name: email-manager-backend
+    port: 4210
+    grants:
+      secrets:
+      - BREVO_API_KEY
+      - MAIL_FROM_EMAIL
+      - MAIL_FROM_NAME
+      - EMAIL_SERVICE_TOKEN
+    config: {}
+    access:
+      routes:
+      - path: /email-admin
+        level: role:superadmin
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /email-admin/*
+        level: role:superadmin
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /email/unsubscribe
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+  auth:
+    email_verification:
+      enabled: null
+attestation: 44CVyZBcSaCZ6W+U+mYxTIuBAQDeUJ7hM7F9yfkMZ5AUBwdEX1GLBOBCfrLOhtoGt8ycZVgXEw/Ln+uF6gNCBw==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
