@@ -1,0 +1,142 @@
+name: i18n
+domain: i18n
+version: 0.3.0
+publisher: getecosphere
+status: verified
+license: mit
+summary: 'Translation catalogs as a service: versioned message catalogs served over HTTP with stable ETags, so estates localize content without rebuilding'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/i18n
+    sha256: 2dda789a4c771b44f80b818b9a70fe6353c8f0dc187dc05a8a95fab29acdd9f1
+    size: 1967616
+  linux/amd64:
+    path: linux-amd64/i18n
+    sha256: cd4fe68151393c0f1b78cf107c1e0c16e8b4c4cd4e5e75b9acd73cb799c4bdc8
+    size: 1559336
+contract:
+  version: 2
+  api: 'i18n: GET /api/i18n/locales + GET|PUT /api/i18n/catalog/:locale/:namespace + GET /api/i18n/health'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - DEFAULT_LOCALE
+    - LOCALES
+    - DATA_DIR
+    - I18N_WRITE_TOKEN
+    defaults:
+      DEFAULT_LOCALE: en
+      LOCALES: en,id
+      DATA_DIR: .
+    fields:
+      I18N_WRITE_TOKEN:
+        required: false
+        type: string
+        default: ''
+        description: Token (header x-i18n-token) required by PUT /api/i18n/catalog/:locale/:namespace. Empty = uploads are disabled.
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: true
+        managed: ''
+        example: ''
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the i18n service listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      DEFAULT_LOCALE:
+        required: false
+        type: string
+        default: en
+        description: Fallback locale served when a request does not name one
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      LOCALES:
+        required: false
+        type: csv
+        default: en,id
+        description: Locales this instance exposes (comma-separated ISO-639 codes)
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      DATA_DIR:
+        required: false
+        type: string
+        default: .
+        description: Writable directory; uploaded catalogs live in DATA_DIR/catalogs/{namespace}/{locale}.json and override the compiled seed. On deploy the platform points it at the service's persistent state directory, so leave it unset there.
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound: []
+  resources:
+    memory: 16m
+    disk: 32m
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: git@github.com:getecosphere/i18n.git
+  commit: f1b3f56f0e958c06bb9304bcc8fac74419057842
+  built_by: eco@0.4.9
+  built_at: 2026-10-16T21:51:39Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.3.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: 9PwxarAsRQby1/ATW0hMC8OW/uVMoMwZxPbo4tytmGAmzn98KmgIbtEK5dkCEm6GHPu8Zm7dSqhMZZ3kw9CUCg==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
