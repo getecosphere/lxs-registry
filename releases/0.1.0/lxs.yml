@@ -1,0 +1,213 @@
+name: releases
+domain: releases
+version: 0.1.0
+publisher: getecosphere
+status: verified
+license: mit
+summary: 'App release hosting: release files at stable URLs, Sparkle appcast, latest-download redirects, token-protected publishing (S3-compatible storage, no database)'
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/releases
+    sha256: bf9a8b5705144fea237ed2ed45c9ebbf14a00ae8529af7be10cd9a112439e7b7
+    size: 23057936
+  linux/amd64:
+    path: linux-amd64/releases
+    sha256: c69f46956c330f94f4ca7484761f7764cc38271bc0e3e159034be48c5eb10dad
+    size: 18505352
+contract:
+  version: 2
+  api: releases REST API (/api/releases/*)
+  env:
+    required: []
+    optional: []
+    defaults: {}
+    fields:
+      S3_ENDPOINT:
+        required: true
+        type: secret
+        default: ''
+        description: S3-compatible endpoint (the estate's MinIO)
+        group: storage
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      S3_REGION:
+        required: false
+        type: secret
+        default: ''
+        description: S3 region
+        group: storage
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      RELEASES_PREFIX:
+        required: false
+        type: string
+        default: releases
+        description: 'Key prefix inside the bucket: <prefix>/<app>/<version>/<file> + <prefix>/<app>/manifest.json'
+        group: storage
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      SERVER_PORT:
+        required: true
+        type: int
+        default: ''
+        description: Port the releases API listens on
+        group: ''
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: port
+        example: ''
+      MAX_UPLOAD_MB:
+        required: false
+        type: int
+        default: '500'
+        description: Largest accepted publish request, in MB (mind the CDN's own body limit)
+        group: publishing
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      S3_BUCKET:
+        required: false
+        type: string
+        default: releases
+        description: Bucket for release files (may be shared with the storage LXS; files live under RELEASES_PREFIX)
+        group: storage
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      APPCAST_ITEMS:
+        required: false
+        type: int
+        default: '5'
+        description: How many releases the Sparkle appcast lists
+        group: publishing
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      PUBLIC_BASE_URL:
+        required: true
+        type: url
+        default: ''
+        description: Public URL of this API as clients see it, e.g. https://example.com/api/releases (used in appcast enclosures and latest redirects)
+        group: publishing
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      S3_ACCESS_KEY:
+        required: true
+        type: secret
+        default: ''
+        description: S3 access key
+        group: storage
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      S3_SECRET_KEY:
+        required: true
+        type: secret
+        default: ''
+        description: S3 secret key
+        group: storage
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+      RELEASES_TOKEN:
+        required: true
+        type: secret
+        default: ''
+        description: Bearer token for publishing and yanking releases (≥ 24 chars); per-project secret store only
+        group: publishing
+        choices: []
+        min: 0.0
+        max: 0.0
+        pattern: ''
+        secret: false
+        managed: ''
+        example: ''
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - s3
+  resources:
+    memory: 64m
+    disk: 100m
+    startup_seconds: 3
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/releases.git
+  commit: 07e4c793d990f049c9becda6f8ff4f568a42a13c
+  built_by: eco@0.4.6
+  built_at: 2026-10-19T01:13:54Z
+  target: x86_64-unknown-linux-musl
+release:
+- 0.1.0
+docs:
+- README.md
+- api.md
+- changelog.md
+compose:
+  service:
+    name: ''
+    port: 0
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes: []
+  auth:
+    email_verification:
+      enabled: null
+attestation: jEDcKbv9lkdFIxVy9XZt29nt+PjxO83SV/azuHfAx9Fk4iqCtphcVQ/Iao0y75/7Pwb0LwXrLVX6bs2YY+2aDQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
