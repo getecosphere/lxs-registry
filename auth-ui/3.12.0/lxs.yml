@@ -1,0 +1,177 @@
+name: auth-ui
+domain: auth
+version: 3.12.0
+publisher: stuff8
+status: verified
+license: mit
+summary: White-label signin, signup, and password recovery pages for the auth domain (Leptos SSR)
+targets:
+- darwin/arm64
+- linux/amd64
+artifacts:
+  darwin/arm64:
+    path: darwin-arm64/auth-ui
+    sha256: e647a441969ba5d381dcb1446ea106599cf5c4783c5e1a3393c9d88a516bba8e
+    size: 3308784
+  linux/amd64:
+    path: linux-amd64/auth-ui
+    sha256: 2baaa527138de92fa50305947d2d3ab2b914e05cf0ff71d4fe74c6ff2592a739
+    size: 2277240
+contract:
+  version: 1
+  api: 'auth-ui pages: GET /signin, GET /signup, GET /forgot-password, GET /reset-password, GET /verify-email, GET /users (role:superadmin)'
+  env:
+    required:
+    - SERVER_PORT
+    optional:
+    - AUTH_API_BASE
+    - AUTH_REDIRECT_URL
+    - OIDC_ENABLED
+    - GOOGLE_ENABLED
+    - LOGIN_METHODS
+    defaults: {}
+    fields: {}
+  db: none
+  network:
+    inbound:
+    - http
+    outbound:
+    - http
+  resources:
+    memory: 32m
+    disk: 32m
+    startup_seconds: 5
+  health:
+    path: ''
+    readiness: ''
+runtime:
+  base: self-contained-static
+  libc: musl
+  dependencies: []
+provenance:
+  source: https://github.com/getecosphere/auth-ui.git
+  commit: 5adfea2637d38fc812604800f589fe04172eff2f
+  built_by: eco@0.4.11
+  built_at: 2026-10-23T16:14:37Z
+  target: x86_64-unknown-linux-musl
+release:
+- 3.12.0
+docs:
+- README.md
+- api.md
+- changelog.md
+- gotchas.md
+compose:
+  service:
+    name: auth-ui
+    port: 4201
+    grants:
+      secrets: []
+    config: {}
+    access:
+      routes:
+      - path: /signin
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /signup
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /forgot-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /reset-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /verify-email
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /delete-account
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /users
+        level: role:superadmin
+        strip: ''
+        rewrite: ''
+        cookie: eco_token
+      - path: /static/auth-ui.css
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/signin
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/signup
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/forgot-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/reset-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/verify-email
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /fr/delete-account
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/signin
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/signup
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/forgot-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/reset-password
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/verify-email
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+      - path: /de/delete-account
+        level: public
+        strip: ''
+        rewrite: ''
+        cookie: ''
+  auth:
+    email_verification:
+      enabled: null
+attestation: UN8c+al10iQar9y5l8kNbA9RNt0kTB7DtjxrnTb9b/Jx5IZpSSLgd08oogCzwbcKhbGYyUjTGtkL8CDEIh+QAQ==
+signing_key: qVfnrX+hYBsmPKKQWDwbnUrIsORvjMTxNO0YUR76Nv8=
